@@ -1,0 +1,48 @@
+create table iszl.iszl_data
+(
+    "pID"            text,
+    "ldwID"          text,
+    "pdwID"          text,
+    "FIO"            text,
+    "DR"             text,
+    "DS"             text,
+    "DateBegin"      text,
+    "DateEnd"        double precision,
+    "idReason"       double precision,
+    "nameReason"     double precision,
+    "PlanMonth"      text,
+    "PlanYear"       text,
+    "FAM_D"          text,
+    "IM_D"           text,
+    "OT_D"           text,
+    "SS_D"           text,
+    "SPEC_D"         text,
+    "SpecV015"       text,
+    "DateInfo"       double precision,
+    "WayInfo"        double precision,
+    "ResInfo"        double precision,
+    "FactDN"         double precision,
+    "RezultDN"       double precision,
+    "ADR"            text,
+    "ENP"            text,
+    "LPU"            text,
+    "FIO_DOCTOR"     text,
+    "SS_DOCTOR"      text,
+    "LPUUCH"         text,
+    "SMO"            text,
+    "LPUAUTO"        text,
+    "LPUDT"          text,
+    "UserUpdateList" text,
+    "DateUpdateList" text,
+    "UserUpdatePlan" text,
+    "DateUpdatePlan" text,
+    "PeriodW"        text,
+    "DatePrev"       text,
+    "PlaceW"         text,
+    w                text,
+    "Unnamed: 40"    double precision
+);
+
+alter table iszl.iszl_data
+    owner to postgres;
+
