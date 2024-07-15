@@ -1,8 +1,10 @@
-from dash import State, html, Output, Input
+# footer.py
+from dash import State, html, Output, Input, dcc, dash
 from datetime import datetime
 import dash_bootstrap_components as dbc
+from flask_login import current_user, logout_user
 from services.MosaicMed.app import app
-from services.MosaicMed.components import site_mo, name_mo
+from services.MosaicMed import site_mo, name_mo
 
 year = datetime.now().year
 
@@ -21,34 +23,95 @@ footer_style = {
 
 footer_main = html.Div([
     html.Footer(children=[
-        html.P(html.A("МозаикаМед", href="http://mosaicmed.ru/", style={'text-decoration': 'none', 'color': 'white'}),
-               style={'margin-left': '8%'}),
-        html.P(id='open-modal', children=f"© Разработка приложения Родионов Д.Н., 2023—{year}"),
+        html.P(id='user-info', style={'margin-left': '8%', 'cursor': 'pointer'}),
+        html.P(id='open-developer-modal', children=f"© Разработка приложения Родионов Д.Н., 2023—{year}"),
         html.P(html.A(name_mo, href=site_mo,
                       style={'text-decoration': 'none', 'color': 'white'}),
                style={'margin-right': '8%'}),
     ], style=footer_style),
 ])
 
-modal = html.Div([
+user_modal = html.Div([
     dbc.Modal([
-        dbc.ModalBody(html.Img(src="../assets/img/contacts.jpg", style={'width': '100%'})),
-        dbc.ModalFooter(
-            dbc.Button("Закрыть", id="close", className="ml-auto")
-        ),
-    ], id="modal", is_open=False),
+        dbc.ModalHeader("Информация о пользователе", close_button=False),
+        dbc.ModalBody([
+            html.P(id='user-full-name'),
+            html.P(id='user-position'),
+            html.P(id='user-role'),
+            html.P(id='user-category'),
+            html.P(id='user-birth-date'),
+        ]),
+        dbc.ModalFooter([
+            dbc.Button("Выход", id="logout-button", color="danger", className="ml-auto"),
+            dbc.Button("Закрыть", id="close-user-modal", className="ml-auto")
+        ]),
+    ], id="user-modal", is_open=False),
 ])
 
-footer = html.Div([footer_main, modal])
+developer_modal = html.Div([
+    dbc.Modal([
+        dbc.ModalHeader("О разработчике", close_button=False),
+        dbc.ModalBody(html.Img(src="../assets/img/contacts.jpg", style={'width': '100%'})),
+        dbc.ModalFooter([
+            dbc.Button("Закрыть", id="close-developer-modal", className="ml-auto")
+        ]),
+    ], id="developer-modal", is_open=False),
+])
 
+footer = html.Div([footer_main, user_modal, developer_modal])
 
 @app.callback(
-    Output("modal", "is_open"),
-    [Input("open-modal", "n_clicks"), Input("close", "n_clicks")],
-    [State("modal", "is_open")],
+    Output("user-modal", "is_open"),
+    [Input("user-info", "n_clicks"), Input("close-user-modal", "n_clicks")],
+    [State("user-modal", "is_open")],
 )
-def toggle_modal(open_clicks, close_clicks, is_open):
+def toggle_user_modal(open_clicks, close_clicks, is_open):
     if open_clicks or close_clicks:
         return not is_open
     return is_open
 
+@app.callback(
+    Output("developer-modal", "is_open"),
+    [Input("open-developer-modal", "n_clicks"), Input("close-developer-modal", "n_clicks")],
+    [State("developer-modal", "is_open")],
+)
+def toggle_developer_modal(open_clicks, close_clicks, is_open):
+    if open_clicks or close_clicks:
+        return not is_open
+    return is_open
+
+@app.callback(
+    Output('user-info', 'children'),
+    Input('url', 'pathname')
+)
+def update_user_info(pathname):
+    if current_user.is_authenticated:
+        return f"{current_user.last_name} {current_user.first_name[0]}. {current_user.middle_name[0]}."
+    return "Гость"
+
+@app.callback(
+    [Output('user-full-name', 'children'),
+     Output('user-position', 'children'),
+     Output('user-role', 'children'),
+     Output('user-category', 'children'),
+     Output('user-birth-date', 'children')],
+    Input('user-modal', 'is_open')
+)
+def update_modal_user_info(is_open):
+    if is_open and current_user.is_authenticated:
+        return (f"ФИО: {current_user.last_name} {current_user.first_name} {current_user.middle_name}",
+                f"Должность: {current_user.position}",
+                f"Роль: {current_user.role}",
+                f"Категория: {current_user.category}",
+                f"Дата рождения: {current_user.birth_date}")
+    return ("", "", "", "", "")
+
+@app.callback(
+    Output('url', 'pathname'),
+    Input('logout-button', 'n_clicks')
+)
+def logout(n_clicks):
+    if n_clicks:
+        logout_user()
+        return '/login'
+    return dash.no_update

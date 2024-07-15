@@ -1,18 +1,22 @@
 # app.py
+from services.MosaicMed.Authentication.flask_app import flask_app
 import dash
 import dash_bootstrap_components as dbc
-from sqlalchemy import create_engine
-from database.db_settings import DATABASE_URL
+
+external_stylesheets = [
+    dbc.themes.BOOTSTRAP,
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css",
+]
 
 app = dash.Dash(__name__,
+                server=flask_app,
+                url_base_pathname='/',
+                external_stylesheets=external_stylesheets,
                 update_title=None,
-                suppress_callback_exceptions=True,
-                external_stylesheets=[dbc.themes.BOOTSTRAP])
+                suppress_callback_exceptions=True)
 
 # Установка заголовка вкладки
 app.title = 'МозаикаМед'
-
-# Подключение к базе данных
-engine = create_engine(DATABASE_URL)
+app._favicon = 'assets/img/favicon.ico'
 
 server = app.server

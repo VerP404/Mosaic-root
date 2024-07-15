@@ -1,5 +1,7 @@
 from dash import html, dcc, Output, Input, dash_table
-from services.MosaicMed.app import app, engine
+
+from database.db_conn import engine
+from services.MosaicMed.app import app
 from services.MosaicMed.callback.callback import get_selected_doctors, get_filter_month, TableUpdater
 from services.MosaicMed.pages.doctors_talon.query import sql_query_dd_def, sql_query_amb_def, sql_query_stac_def
 

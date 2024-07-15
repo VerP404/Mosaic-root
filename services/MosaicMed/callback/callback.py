@@ -3,8 +3,8 @@ import os
 import pandas as pd
 import datetime
 from sqlalchemy import text
-from services.MosaicMed.app import engine
 
+from database.db_conn import engine
 from services.MosaicMed.utils import get_extracted_names_list_doctors, get_extracted_names_list_specialist
 
 months_dict = {
