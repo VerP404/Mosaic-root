@@ -3,11 +3,12 @@ from dash import Input, Output, dcc, html
 from services.MosaicMed.pages.admin.settings import settings_layout
 from services.MosaicMed.pages.admin.users import users_layout
 from services.MosaicMed.pages.admin.roles import roles_layout
+from services.MosaicMed.pages.doctors_talon.tab import app_tabs_doctors
 from services.MosaicMed.pages.it_department.update_database.update_database import tab_layout_it_update_bd
 
 # Проверка доступа для специфичных маршрутов
 routes = {
-    "/doctors-report": html.H2("Врачи"),
+    "/doctors-report": app_tabs_doctors,
     "/dispensary/adult": html.H2("Взрослые"),
     "/dispensary/children": html.H2("Дети"),
     "/dispensary/reproductive": html.H2("Репродуктивное"),
