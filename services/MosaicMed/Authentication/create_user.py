@@ -16,7 +16,7 @@ if __name__ == "__main__":
         last_name="Admin",
         first_name="Admin",
         middle_name="Adminovich",
-        birth_date="1970-01-01",
+        birth_date="1992-07-26",
         position="Administrator",
         role="admin",
         category="general"

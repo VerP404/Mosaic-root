@@ -2,7 +2,7 @@
 ROOT_DATABASE = {
     'dbname': 'postgres',
     'user': 'postgres',
-    'password': 'postgres',
+    'password': 'Qaz123',
     'host': 'localhost',
     'port': '5432',
 }

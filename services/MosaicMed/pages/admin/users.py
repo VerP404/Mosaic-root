@@ -1,4 +1,4 @@
-# admin.py
+# users.py
 from dash import html, dcc, dash_table, callback_context
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
@@ -22,7 +22,7 @@ def fetch_all_users():
         for user in users
     ]
 
-admin_layout = html.Div([
+users_layout = html.Div([
     dbc.Row([
         dbc.Col([
             dbc.Card(

@@ -8,14 +8,34 @@ from services.MosaicMed.Authentication.models import RoleModuleAccess, SessionLo
 def get_roles():
     return ['operator', 'doctor', 'economist', 'statistician', 'manager', 'head', 'admin']
 
+
 def get_modules():
-    return ['doctors-report', 'dispensary', 'econ', 'it', 'admin', 'other-modules', 'errors', 'admin-access', 'eln']
+    return ['doctors-report',
+            'dispensary',
+            'econ',
+            'it',
+            'admin',
+            'other-modules',
+            'errors',
+            'admin-access',
+            'eln',
+            'iszl',
+            'dispensary-observation',
+            'other-reports',
+            'volumes',
+            'templates',
+            'filling-lists',
+            'wo-coupons',
+            'dashboards',
+            ]
+
 
 def fetch_access_data():
     session = SessionLocal()
     access_data = session.query(RoleModuleAccess).all()
     session.close()
     return [{'role': access.role, 'module': access.module} for access in access_data]
+
 
 def generate_access_table():
     roles = get_roles()
@@ -43,14 +63,17 @@ def generate_access_table():
         className="access-table"
     )
 
-def admin_access_layout():
+
+def roles_layout():
     return html.Div([
         dbc.Alert(id="save-alert", color="success", is_open=False, dismissable=True, children="Изменения сохранены."),
         html.H2("Управление доступом к модулям", style={"margin-top": "20px"}),
         generate_access_table(),
-        dbc.Button("Сохранить изменения", id="save-access-button", color="primary", className="mr-2", style={"margin-top": "20px"}),
-        dcc.Interval(id='alert-interval', interval=1*1000, n_intervals=0, disabled=True)  # Интервал в миллисекундах
+        dbc.Button("Сохранить изменения", id="save-access-button", color="primary", className="mr-2",
+                   style={"margin-top": "20px"}),
+        dcc.Interval(id='alert-interval', interval=1 * 1000, n_intervals=0, disabled=True)  # Интервал в миллисекундах
     ], style={"margin": "50px"})
+
 
 @app.callback(
     Output('save-alert', 'is_open'),
