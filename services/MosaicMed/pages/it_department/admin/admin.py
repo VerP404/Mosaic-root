@@ -93,7 +93,7 @@ admin_layout = html.Div([
                                            className="mr-2", style={"width": "100%"})
                             ]),
                             dbc.Col([
-                                dbc.Button("Очистить форму", id="clear-button", color="secondary", className="mr-2",
+                                dbc.Button("Очистить", id="clear-button", color="secondary", className="mr-2",
                                            style={"width": "100%"})
                             ])
                         ])

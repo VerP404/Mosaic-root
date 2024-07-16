@@ -6,7 +6,7 @@ from services.MosaicMed.pages.doctors_talon.tab1 import tab1_doctor_talon_layout
 type_page = 'doctors-talon'
 
 # вкладки
-app_tabs_dtr = html.Div(
+app_tabs_doctors = html.Div(
     [
         html.Div(
             [

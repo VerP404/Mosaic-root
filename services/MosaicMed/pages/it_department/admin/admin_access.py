@@ -1,14 +1,15 @@
-from dash import html, dcc, dash_table
+from dash import html, dcc, callback_context, dash
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output, State, ALL
 from services.MosaicMed.app import app
 from services.MosaicMed.Authentication.models import RoleModuleAccess, SessionLocal
+
 
 def get_roles():
     return ['operator', 'doctor', 'economist', 'statistician', 'manager', 'head', 'admin']
 
 def get_modules():
-    return ['main', 'doctors-talon-report', 'it-admin', 'other-modules']
+    return ['doctors-report', 'dispensary', 'econ', 'it', 'admin', 'other-modules', 'errors', 'admin-access', 'eln']
 
 def fetch_access_data():
     session = SessionLocal()
@@ -21,54 +22,69 @@ def generate_access_table():
     modules = get_modules()
     access_data = fetch_access_data()
 
-    data = []
-    for module in modules:
-        row = {'module': module}
-        for role in roles:
-            row[role] = 'Да' if any(item['role'] == role and item['module'] == module for item in access_data) else 'Нет'
-        data.append(row)
+    def is_checked(role, module):
+        return any(item['role'] == role and item['module'] == module for item in access_data)
 
-    columns = [{'name': 'Модуль', 'id': 'module', 'editable': False}] + [{'name': role, 'id': role, 'presentation': 'dropdown'} for role in roles]
-
-    return dash_table.DataTable(
-        id='access-table',
-        columns=columns,
-        data=data,
-        editable=True,
-        dropdown={
-            role: {
-                'options': [
-                    {'label': 'Да', 'value': 'Да'},
-                    {'label': 'Нет', 'value': 'Нет'}
-                ]
-            } for role in roles
-        },
+    return html.Table(
+        # Заголовок таблицы
+        [html.Tr([html.Th('Модуль')] + [html.Th(role) for role in roles], className="table-header")] +
+        # Строки таблицы
+        [
+            html.Tr([
+                html.Td(module, className="table-cell"),
+                *[html.Td(dcc.Checklist(
+                    options=[{'label': '', 'value': 'checked'}],
+                    value=['checked'] if is_checked(role, module) else [],
+                    id={'type': 'checkbox', 'role': role, 'module': module},
+                    inputStyle={"margin-right": "10px"}
+                ), className="table-cell") for role in roles]
+            ], className="table-row") for module in modules
+        ],
+        className="access-table"
     )
 
 def admin_access_layout():
     return html.Div([
+        dbc.Alert(id="save-alert", color="success", is_open=False, dismissable=True, children="Изменения сохранены."),
         html.H2("Управление доступом к модулям", style={"margin-top": "20px"}),
         generate_access_table(),
         dbc.Button("Сохранить изменения", id="save-access-button", color="primary", className="mr-2", style={"margin-top": "20px"}),
-        dbc.Alert(id="save-alert", color="success", is_open=False, dismissable=True, children="Изменения сохранены.")
+        dcc.Interval(id='alert-interval', interval=1*1000, n_intervals=0, disabled=True)  # Интервал в миллисекундах
     ], style={"margin": "50px"})
 
 @app.callback(
-    Output('access-table', 'data'),
     Output('save-alert', 'is_open'),
-    [Input('save-access-button', 'n_clicks')],
-    [State('access-table', 'data')]
+    Output('alert-interval', 'disabled'),
+    Output('alert-interval', 'n_intervals'),
+    [Input('save-access-button', 'n_clicks'),
+     Input('alert-interval', 'n_intervals')],
+    [State({'type': 'checkbox', 'role': ALL, 'module': ALL}, 'id'),
+     State({'type': 'checkbox', 'role': ALL, 'module': ALL}, 'value')]
 )
-def save_access_data(n_clicks, table_data):
-    if n_clicks:
+def manage_alert_and_save(n_clicks, n_intervals, checkbox_ids, checkbox_values):
+    ctx = callback_context
+
+    if not ctx.triggered:
+        return False, True, 0
+
+    trigger = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    if trigger == 'save-access-button' and n_clicks:
         session = SessionLocal()
         session.query(RoleModuleAccess).delete()
-        for row in table_data:
-            for role, access in row.items():
-                if role != 'module' and access == 'Да':
-                    new_access = RoleModuleAccess(role=role, module=row['module'])
-                    session.add(new_access)
+
+        for checkbox_id, checkbox_value in zip(checkbox_ids, checkbox_values):
+            role = checkbox_id['role']
+            module = checkbox_id['module']
+            if checkbox_value:
+                new_access = RoleModuleAccess(role=role, module=module)
+                session.add(new_access)
+
         session.commit()
         session.close()
-        return table_data, True
-    return table_data, False
+        return True, False, 0
+
+    elif trigger == 'alert-interval' and n_intervals >= 5:
+        return False, True, 0
+
+    return dash.no_update

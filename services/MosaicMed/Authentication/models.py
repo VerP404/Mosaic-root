@@ -1,12 +1,11 @@
 # models.py
-from sqlalchemy import Column, Integer, String, Date
-from sqlalchemy.orm import Session
+from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from sqlalchemy.orm import relationship
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
 from database.db_conn import Base, SessionLocal
 
 bcrypt = Bcrypt()
-
 
 class UserModel(Base):
     __tablename__ = 'user'
@@ -22,7 +21,6 @@ class UserModel(Base):
     position = Column(String)
     role = Column(String)
     category = Column(String)
-
 
 class User(UserMixin):
     def __init__(self, id, username, hashed_password, last_name, first_name, middle_name, birth_date, position, role,
@@ -88,3 +86,17 @@ class RoleModuleAccess(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     role = Column(String, nullable=False)
     module = Column(String, nullable=False)
+
+
+class RolePageAccess(Base):
+    __tablename__ = 'role_page_access'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    role = Column(String, nullable=False)
+    page = Column(String, nullable=False)
+
+
+def user_has_access(role, page):
+    session = SessionLocal()
+    access = session.query(RolePageAccess).filter_by(role=role, page=page).first()
+    session.close()
+    return access is not None
