@@ -1,18 +1,15 @@
-# settings.py
 import dash
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from services.MosaicMed.app import app
-from services.MosaicMed.Authentication.models import Setting, SessionLocal
-
+from services.MosaicMed.authentication.models import Setting, SessionLocal
 
 def get_setting(name: str) -> str:
     session = SessionLocal()
     setting = session.query(Setting).filter(Setting.name == name).first()
     session.close()
-    return setting.value if setting else None
-
+    return setting.value if setting else ""
 
 def set_setting(name: str, value: str) -> None:
     session = SessionLocal()
@@ -24,7 +21,6 @@ def set_setting(name: str, value: str) -> None:
         session.add(setting)
     session.commit()
     session.close()
-
 
 settings_layout = html.Div([
     dbc.Row([
@@ -53,7 +49,7 @@ settings_layout = html.Div([
                                           value=get_setting("short_name_mo"), required=True)
                             ], width=6),
                             dbc.Col([
-                                dbc.Label("Дашборд шефа:", html_for="dashboard_chef"),
+                                dbc.Label("Дашборд главного врача:", html_for="dashboard_chef"),
                                 dbc.Input(type="text", id="dashboard_chef", placeholder="Введите URL",
                                           value=get_setting("dashboard_chef"), required=True)
                             ], width=6)
@@ -69,10 +65,6 @@ settings_layout = html.Div([
                             dbc.Col([
                                 dbc.Button("Сохранить", id="save-settings-button", color="primary", className="mr-2",
                                            style={"width": "100%"})
-                            ]),
-                            dbc.Col([
-                                dbc.Button("Очистить", id="clear-settings-button", color="secondary", className="mr-2",
-                                           style={"width": "100%"})
                             ])
                         ])
                     ])
@@ -80,10 +72,9 @@ settings_layout = html.Div([
                 style={"width": "100%", "padding": "2rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
                        "border-radius": "10px"}
             )
-        ], width=6)
-    ])
-])
-
+        ], width=8)
+    ], style={"margin": "0 auto", "max-width": "1200px"})
+], style={"padding": "2rem"})
 
 @app.callback(
     Output("settings-output-state", "children"),
@@ -94,18 +85,17 @@ settings_layout = html.Div([
     Output('dashboard_chef', 'value'),
     Output('dashboard_patient', 'value'),
     Input("save-settings-button", "n_clicks"),
-    Input("clear-settings-button", "n_clicks"),
     State("site_mo", "value"),
     State("name_mo", "value"),
     State("short_name_mo", "value"),
     State("dashboard_chef", "value"),
     State("dashboard_patient", "value")
 )
-def manage_settings(save_clicks, clear_clicks, site_mo, name_mo, short_name_mo, dashboard_chef, dashboard_patient):
+def manage_settings(save_clicks, site_mo, name_mo, short_name_mo, dashboard_chef, dashboard_patient):
     ctx = dash.callback_context
 
     if not ctx.triggered:
-        return "", False, site_mo, name_mo, short_name_mo, dashboard_chef, dashboard_patient
+        return "", False, get_setting("site_mo"), get_setting("name_mo"), get_setting("short_name_mo"), get_setting("dashboard_chef"), get_setting("dashboard_patient")
 
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
@@ -116,9 +106,5 @@ def manage_settings(save_clicks, clear_clicks, site_mo, name_mo, short_name_mo, 
         set_setting("dashboard_chef", dashboard_chef)
         set_setting("dashboard_patient", dashboard_patient)
         return "Настройки сохранены.", True, site_mo, name_mo, short_name_mo, dashboard_chef, dashboard_patient
-
-    if button_id == 'clear-settings-button':
-        return "", False, get_setting("site_mo"), get_setting("name_mo"), get_setting("short_name_mo"), get_setting(
-            "dashboard_chef"), get_setting("dashboard_patient")
 
     return "", False, site_mo, name_mo, short_name_mo, dashboard_chef, dashboard_patient

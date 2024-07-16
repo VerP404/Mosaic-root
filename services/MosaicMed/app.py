@@ -1,5 +1,5 @@
 # app.py
-from services.MosaicMed.Authentication.flask_app import flask_app
+from services.MosaicMed.authentication.flask_app import flask_app
 import dash
 import dash_bootstrap_components as dbc
 

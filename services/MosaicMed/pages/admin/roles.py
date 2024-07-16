@@ -2,7 +2,7 @@ from dash import html, dcc, callback_context, dash
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State, ALL
 from services.MosaicMed.app import app
-from services.MosaicMed.Authentication.models import RoleModuleAccess, SessionLocal
+from services.MosaicMed.authentication.models import RoleModuleAccess, SessionLocal
 
 
 def get_roles():

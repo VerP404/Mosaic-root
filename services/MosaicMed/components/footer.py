@@ -4,7 +4,7 @@ from datetime import datetime
 import dash_bootstrap_components as dbc
 from flask_login import current_user, logout_user
 from services.MosaicMed.app import app
-from services.MosaicMed import site_mo, name_mo
+from services.MosaicMed.pages.admin.settings import get_setting
 
 year = datetime.now().year
 
@@ -25,9 +25,8 @@ footer_main = html.Div([
     html.Footer(children=[
         html.P(id='user-info', style={'margin-left': '8%', 'cursor': 'pointer'}),
         html.P(id='open-developer-modal', children=f"© Разработка приложения Родионов Д.Н., 2023—{year}"),
-        html.P(html.A(name_mo, href=site_mo,
-                      style={'text-decoration': 'none', 'color': 'white'}),
-               style={'margin-right': '8%'}),
+        html.P(id='footer-mo-name', children=html.A(get_setting("name_mo"), href=get_setting("site_mo"),
+                                                    style={'text-decoration': 'none', 'color': 'white'}), style={'margin-right': '8%'}),
     ], style=footer_style),
 ])
 
@@ -115,3 +114,14 @@ def logout(n_clicks):
         logout_user()
         return '/login'
     return dash.no_update
+
+@app.callback(
+    Output('footer-mo-name', 'children'),
+    [Input('save-settings-button', 'n_clicks')],
+    [State('name_mo', 'value'), State('site_mo', 'value')]
+)
+def update_footer_mo_name(n_clicks, name_mo, site_mo):
+    if n_clicks:
+        return html.A(name_mo, href=site_mo, style={'text-decoration': 'none', 'color': 'white'})
+    return html.A(get_setting("name_mo"), href=get_setting("site_mo"),
+                  style={'text-decoration': 'none', 'color': 'white'})

@@ -1,10 +1,11 @@
 # models.py
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, Text
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Date, Text
+from sqlalchemy.orm import declarative_base
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
-from database.db_conn import Base, SessionLocal
+from database.db_conn import SessionLocal
 
+Base = declarative_base()
 bcrypt = Bcrypt()
 
 
@@ -106,6 +107,7 @@ def user_has_access(role, page):
 
 class Setting(Base):
     __tablename__ = 'settings'
+    __table_args__ = {'schema': 'settings'}
 
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)

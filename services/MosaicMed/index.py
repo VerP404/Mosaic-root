@@ -2,7 +2,7 @@
 from dash import Input, Output, dcc, html
 from flask_login import current_user
 
-from services.MosaicMed.Authentication.models import user_has_access
+from services.MosaicMed.authentication.models import user_has_access
 from services.MosaicMed.app import app
 from services.MosaicMed.components.content import content
 from services.MosaicMed.components.footer import footer

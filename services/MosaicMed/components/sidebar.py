@@ -4,9 +4,9 @@ import dash_bootstrap_components as dbc
 from flask_login import current_user
 
 from database.db_conn import SessionLocal
-from services.MosaicMed import dashboard_chef, dashboard_patient, short_name_mo
-from services.MosaicMed.Authentication.models import RoleModuleAccess
-
+# from services.MosaicMed import dashboard_chef, dashboard_patient, short_name_mo
+from services.MosaicMed.authentication.models import RoleModuleAccess
+from services.MosaicMed.pages.admin.settings import get_setting
 SIDEBAR_CONTENT_STYLE_HIDE_SCROLL = {
     "overflow-y": "scroll",
     "height": "calc(100% - 60px)",
@@ -187,7 +187,7 @@ def get_sidebar():
 
     return html.Div(
         [
-            html.H2(short_name_mo, className="display-8 text-center", id="sidebar-title"),
+            html.H2(get_setting("short_name_mo"), className="display-8 text-center", id="sidebar-title"),
             html.Hr(style={"margin": "1px"}),
             html.Div(sidebar_content, style=SIDEBAR_CONTENT_STYLE_HIDE_SCROLL)
         ],
