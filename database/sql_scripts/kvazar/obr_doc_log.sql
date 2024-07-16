@@ -1,4 +1,4 @@
-create table kvazar.obr_doc_log
+create table kvazar.obrdoc_log
 (
     "File_name" text,
     "File_date" text,
@@ -6,6 +6,6 @@ create table kvazar.obr_doc_log
     name_text   text
 );
 
-alter table kvazar.obr_doc_log
+alter table kvazar.obrdoc_log
     owner to postgres;
 

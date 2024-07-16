@@ -1,4 +1,4 @@
-create table oms.detail_dd_log
+create table oms.detaildd_log
 (
     "File_name" text,
     "File_date" text,
@@ -6,6 +6,6 @@ create table oms.detail_dd_log
     name_text   text
 );
 
-alter table oms.detail_dd_log
+alter table oms.detaildd_log
     owner to postgres;
 

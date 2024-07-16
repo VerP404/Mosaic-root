@@ -1,4 +1,4 @@
-create table oms.detail_dd_data
+create table oms.detaildd_data
 (
     "Номер талона"                         text,
     "Счет"                                 text,
@@ -33,6 +33,6 @@ create table oms.detail_dd_data
     "Код МО (при оказ.услуги в другой МО)" text
 );
 
-alter table oms.detail_dd_data
+alter table oms.detaildd_data
     owner to postgres;
 

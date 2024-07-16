@@ -6,7 +6,7 @@ import psycopg2
 # Добавляем родительский каталог в путь поиска модулей
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from database.db_settings import ROOT_DATABASE, PRODUCT_DATABASES
+from database.db_settings import ROOT_DATABASE
 
 def create_database_and_user():
     conn = psycopg2.connect(
@@ -20,27 +20,18 @@ def create_database_and_user():
 
     try:
         with conn.cursor() as cur:
-            # Проверка существования пользователя
-            cur.execute("SELECT 1 FROM pg_roles WHERE rolname = %s;", (PRODUCT_DATABASES['default']['USER'],))
-            if not cur.fetchone():
-                cur.execute(sql.SQL("CREATE USER {} WITH PASSWORD %s;")
-                            .format(sql.Identifier(PRODUCT_DATABASES['default']['USER'])),
-                            (PRODUCT_DATABASES['default']['PASSWORD'],))
-            else:
-                print(f"Пользователь {PRODUCT_DATABASES['default']['USER']} уже существует.")
-
             # Проверка существования базы данных
-            cur.execute("SELECT 1 FROM pg_database WHERE datname = %s;", (PRODUCT_DATABASES['default']['NAME'],))
+            cur.execute("SELECT 1 FROM pg_database WHERE datname = %s;", (ROOT_DATABASE['dbname'],))
             if not cur.fetchone():
                 cur.execute(sql.SQL("CREATE DATABASE {} WITH OWNER = %s;")
-                            .format(sql.Identifier(PRODUCT_DATABASES['default']['NAME'])),
-                            (PRODUCT_DATABASES['default']['USER'],))
+                            .format(sql.Identifier(ROOT_DATABASE['dbname'])),
+                            (ROOT_DATABASE['user'],))
             else:
-                print(f"База данных {PRODUCT_DATABASES['default']['NAME']} уже существует.")
+                print(f"База данных {ROOT_DATABASE['dbname']} уже существует.")
 
-        print("База данных и пользователь успешно созданы или уже существовали.")
+        print("База данных успешно создана или уже существовала.")
     except psycopg2.Error as e:
-        print(f"Ошибка при создании базы данных и пользователя: {e}")
+        print(f"Ошибка при создании базы данных: {e}")
     finally:
         if conn:
             conn.close()
@@ -48,7 +39,7 @@ def create_database_and_user():
 
 def execute_sql_scripts():
     conn = psycopg2.connect(
-        dbname=PRODUCT_DATABASES['default']['NAME'],
+        dbname=ROOT_DATABASE['dbname'],
         user=ROOT_DATABASE['user'],
         password=ROOT_DATABASE['password'],
         host=ROOT_DATABASE['host'],
@@ -88,7 +79,7 @@ def execute_sql_scripts():
 
 def grant_privileges():
     conn = psycopg2.connect(
-        dbname=PRODUCT_DATABASES['default']['NAME'],
+        dbname=ROOT_DATABASE['dbname'],
         user=ROOT_DATABASE['user'],
         password=ROOT_DATABASE['password'],
         host=ROOT_DATABASE['host'],
@@ -107,34 +98,50 @@ def grant_privileges():
         cursor.execute(
             sql.SQL("GRANT USAGE ON SCHEMA {} TO {};").format(
                 sql.Identifier(schema_name),
-                sql.Identifier(PRODUCT_DATABASES['default']['USER'])
+                sql.Identifier(ROOT_DATABASE['user'])
             )
         )
         cursor.execute(
             sql.SQL("GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA {} TO {};").format(
                 sql.Identifier(schema_name),
-                sql.Identifier(PRODUCT_DATABASES['default']['USER'])
+                sql.Identifier(ROOT_DATABASE['user'])
             )
         )
         cursor.execute(
             sql.SQL("GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA {} TO {};").format(
                 sql.Identifier(schema_name),
-                sql.Identifier(PRODUCT_DATABASES['default']['USER'])
+                sql.Identifier(ROOT_DATABASE['user'])
             )
         )
         cursor.execute(
             sql.SQL("ALTER DEFAULT PRIVILEGES IN SCHEMA {} GRANT ALL PRIVILEGES ON TABLES TO {};").format(
                 sql.Identifier(schema_name),
-                sql.Identifier(PRODUCT_DATABASES['default']['USER'])
+                sql.Identifier(ROOT_DATABASE['user'])
             )
         )
         cursor.execute(
             sql.SQL("ALTER DEFAULT PRIVILEGES IN SCHEMA {} GRANT ALL PRIVILEGES ON SEQUENCES TO {};").format(
                 sql.Identifier(schema_name),
-                sql.Identifier(PRODUCT_DATABASES['default']['USER'])
+                sql.Identifier(ROOT_DATABASE['user'])
             )
         )
-    print(f"Привилегии предоставлены пользователю {PRODUCT_DATABASES['default']['USER']} на все схемы")
+
+        # Изменение владельца таблиц в схеме
+        cursor.execute(
+            sql.SQL("SELECT tablename FROM pg_tables WHERE schemaname = %s;"),
+            [schema_name]
+        )
+        tables = cursor.fetchall()
+        for table in tables:
+            table_name = table[0]
+            cursor.execute(
+                sql.SQL("ALTER TABLE {}.{} OWNER TO {};").format(
+                    sql.Identifier(schema_name),
+                    sql.Identifier(table_name),
+                    sql.Identifier(ROOT_DATABASE['user'])
+                )
+            )
+    print(f"Привилегии предоставлены пользователю {ROOT_DATABASE['user']} на все схемы и таблицы")
 
 
 if __name__ == "__main__":

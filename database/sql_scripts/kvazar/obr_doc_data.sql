@@ -1,4 +1,4 @@
-create table kvazar.obr_doc_data
+create table kvazar.obrdoc_data
 (
     "Фамилия"         text,
     "Имя"             text,
@@ -24,6 +24,6 @@ create table kvazar.obr_doc_data
     "ЭПМЗ"            text
 );
 
-alter table kvazar.obr_doc_data
+alter table kvazar.obrdoc_data
     owner to postgres;
 

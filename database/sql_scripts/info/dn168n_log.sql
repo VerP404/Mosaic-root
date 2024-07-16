@@ -1,4 +1,4 @@
-create table info.dn_168n_log
+create table info.dn168n_log
 (
     "File_name" text,
     "File_date" text,
@@ -6,6 +6,6 @@ create table info.dn_168n_log
     name_text   text
 );
 
-alter table info.dn_168n_log
+alter table info.dn168n_log
     owner to postgres;
 

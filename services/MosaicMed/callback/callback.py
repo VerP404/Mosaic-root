@@ -73,18 +73,18 @@ def get_selected_doctors(selected_value):
     return dropdown_options, selected_item_text
 
 
-def query_last_record_sql(name_table):
+def query_last_record_sql(schema_name, name_table):
     # Получить последнюю запись из базы данных
     with engine.connect() as conn:
-        query = text("""
-SELECT "File_name", "File_date", "Count", "name_text"
-FROM {}
-ORDER BY CAST("File_date" AS TIMESTAMP) DESC
-LIMIT 1
-""".format(name_table))
+        query = text(f'''
+        SELECT "File_name", "File_date", "Count", "name_text"
+        FROM {schema_name}.{name_table}
+        ORDER BY CAST("File_date" AS TIMESTAMP) DESC
+        LIMIT 1
+        ''')
         result = conn.execute(query)
         last_record = result.fetchone()
-        file_name = last_record[0]
+        file_name = last_record[0] if last_record else None
         return file_name
 
 

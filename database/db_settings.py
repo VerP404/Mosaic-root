@@ -1,27 +1,15 @@
 # Настройки подключения рутового пользователя PostgreSQL
 ROOT_DATABASE = {
-    'dbname': 'postgres',
+    'dbname': 'mosaic_db',
     'user': 'postgres',
     'password': 'postgres',
     'host': 'localhost',
     'port': '5432',
 }
 
-# Настройки целевой базы данных
-PRODUCT_DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mosaic_db',
-        'USER': 'mosaic_db',
-        'PASSWORD': '440856Mo',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-
-DB_NAME = PRODUCT_DATABASES['default']['NAME']
-DB_USER = PRODUCT_DATABASES['default']['USER']
-DB_PASSWORD = PRODUCT_DATABASES['default']['PASSWORD']
-DB_HOST = PRODUCT_DATABASES['default']['HOST']
-DB_PORT = PRODUCT_DATABASES['default']['PORT']
+DB_NAME = ROOT_DATABASE['dbname']
+DB_USER = ROOT_DATABASE['user']
+DB_PASSWORD = ROOT_DATABASE['password']
+DB_HOST = ROOT_DATABASE['host']
+DB_PORT = ROOT_DATABASE['port']
 DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"

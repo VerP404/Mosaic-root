@@ -1,4 +1,4 @@
-create table info.dn_168n_data
+create table info.dn168n_data
 (
     "Код МКБ"                  text,
     "Профиль"                  text,
@@ -6,6 +6,6 @@ create table info.dn_168n_data
     "Специальность совместная" text
 );
 
-alter table info.dn_168n_data
+alter table info.dn168n_data
     owner to postgres;
 

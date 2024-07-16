@@ -3,6 +3,7 @@ from dash import Input, Output, dcc, html
 from services.MosaicMed.pages.admin.settings import settings_layout
 from services.MosaicMed.pages.admin.users import users_layout
 from services.MosaicMed.pages.admin.roles import roles_layout
+from services.MosaicMed.pages.it_department.update_database.update_database import tab_layout_it_update_bd
 
 # Проверка доступа для специфичных маршрутов
 routes = {
@@ -20,7 +21,7 @@ routes = {
     "/econ/route-children": html.H2("Экономические отчеты8"),
     "/econ/disp": html.H2("Экономические отчеты9"),
     "/it/gen-invoices": html.H2("it1"),
-    "/it/update-bd": html.H2("it2"),
+    "/it/update-bd": tab_layout_it_update_bd,
     "/it/stat-months": html.H2("it3"),
     "/it/for-smo": html.H2("it4"),
     "/it/cel3": html.H2("it5"),
