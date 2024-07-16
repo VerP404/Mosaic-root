@@ -86,54 +86,6 @@ def execute_sql_scripts():
             conn.close()
 
 
-def create_users_schema():
-    conn = psycopg2.connect(
-        dbname=PRODUCT_DATABASES['default']['NAME'],
-        user=ROOT_DATABASE['user'],
-        password=ROOT_DATABASE['password'],
-        host=ROOT_DATABASE['host'],
-        port=ROOT_DATABASE['port']
-    )
-    conn.autocommit = True
-
-    users_schema_sql = """
-    CREATE SCHEMA IF NOT EXISTS users;
-
-    CREATE TABLE IF NOT EXISTS users.user (
-        id SERIAL PRIMARY KEY,
-        username VARCHAR(255) UNIQUE NOT NULL,
-        hashed_password VARCHAR(255) NOT NULL,
-        last_name VARCHAR(255) NOT NULL,
-        first_name VARCHAR(255) NOT NULL,
-        middle_name VARCHAR(255),
-        birth_date DATE,
-        position VARCHAR(255),
-        role VARCHAR(255) NOT NULL,
-        category VARCHAR(255)
-    );
-
-    CREATE TABLE IF NOT EXISTS users.roles (
-        id SERIAL PRIMARY KEY,
-        role_name VARCHAR(255) UNIQUE NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS users.categories (
-        id SERIAL PRIMARY KEY,
-        category_name VARCHAR(255) UNIQUE NOT NULL
-    );
-    """
-
-    try:
-        with conn.cursor() as cur:
-            cur.execute(users_schema_sql)
-            print("Схема users и таблицы созданы успешно.")
-    except psycopg2.Error as e:
-        print(f"Ошибка при создании схемы users или таблиц: {e}")
-    finally:
-        if conn:
-            conn.close()
-
-
 def grant_privileges():
     conn = psycopg2.connect(
         dbname=PRODUCT_DATABASES['default']['NAME'],
@@ -187,6 +139,5 @@ def grant_privileges():
 
 if __name__ == "__main__":
     create_database_and_user()
-    create_users_schema()
     execute_sql_scripts()
     grant_privileges()

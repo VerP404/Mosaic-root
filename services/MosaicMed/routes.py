@@ -1,4 +1,6 @@
 from dash import Input, Output, dcc, html
+
+from services.MosaicMed.pages.admin.settings import settings_layout
 from services.MosaicMed.pages.admin.users import users_layout
 from services.MosaicMed.pages.admin.roles import roles_layout
 
@@ -24,7 +26,7 @@ routes = {
     "/it/cel3": html.H2("it5"),
     "/admin/users": users_layout,
     "/admin/roles": roles_layout(),
-    "/admin/settings": html.H2("admin"),
+    "/admin/settings": settings_layout,
     "/iszl/disp-nab": html.H2("исзл1"),
     "/iszl/people": html.H2("исзл2"),
     "/dispensary-observation/adult": html.H2("Взрослые"),
