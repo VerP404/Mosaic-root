@@ -112,3 +112,18 @@ class Setting(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
     value = Column(Text, nullable=False)
+
+
+class Department(Base):
+    __tablename__ = 'departments'
+    __table_args__ = {'schema': 'info'}
+
+    id = Column(Integer, primary_key=True, index=True)
+    korpus = Column(String, nullable=False)
+    department_name = Column(String, nullable=False)
+    registry_number = Column(String, nullable=False)
+    oid = Column(String, nullable=False)
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date)
+    f003mpcod = Column(String, nullable=False)
+    mis_kauz_korpus = Column(String, nullable=False)
