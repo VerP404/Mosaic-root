@@ -13,7 +13,7 @@ app_tabs_doctors = html.Div(
                 dbc.Alert("Отчет по врачам", color="primary"),
                 dcc.Tabs(
                     [
-                        dcc.Tab(label='Помесячно', value='tab1', selected_className='custom-tab--selected'),
+                        dcc.Tab(label='По отчетному месяцу', value='tab1', selected_className='custom-tab--selected'),
                     ],
                     id='tabs',
                     value='tab1',

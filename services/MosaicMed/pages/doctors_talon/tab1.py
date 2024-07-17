@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 from database.db_conn import engine
 from services.MosaicMed.app import app
 from services.MosaicMed.callback.callback import get_selected_doctors, TableUpdater
-from services.MosaicMed.pages.doctors_talon.query import sql_query_amb_def
+from services.MosaicMed.pages.doctors_talon.query import sql_query_amb_def, sql_query_stac_def, sql_query_dd_def
 
 type_page = "tab1-doctor-talon"
 
@@ -27,18 +27,20 @@ tab1_doctor_talon_layout = html.Div(
                 dbc.Card(
                     dbc.CardBody(
                         [
-                            html.H2("Фильтры", className="card-title mb-4"),
+                            dbc.CardHeader("Фильтры"),
                             dbc.Row(
                                 [
                                     dbc.Col(
-                                        dcc.Dropdown(id=f'dropdown-doctor-{type_page}', options=[], placeholder='Выберите врача...')
+                                        dcc.Dropdown(id=f'dropdown-doctor-{type_page}', options=[],
+                                                     placeholder='Выберите врача...')
                                     ),
                                     dbc.Col(
                                         dcc.Dropdown(options=[
                                             {'label': '2023', 'value': 2023},
                                             {'label': '2024', 'value': 2024},
                                             {'label': '2025', 'value': 2025}
-                                        ], id=f'dropdown-year-{type_page}', placeholder='Выберите год...', value=current_year)
+                                        ], id=f'dropdown-year-{type_page}', placeholder='Выберите год...',
+                                            value=current_year)
                                     )
                                 ]
                             ),
@@ -56,11 +58,14 @@ tab1_doctor_talon_layout = html.Div(
                                     )
                                 ]
                             ),
-                            html.Div(id=f'selected-doctor-{type_page}', className='filters-label', style={'display': 'none'}),
-                            html.Div(id=f'selected-period-{type_page}', className='filters-label', style={'display': 'none'}),
+                            html.Div(id=f'selected-doctor-{type_page}', className='filters-label',
+                                     style={'display': 'none'}),
+                            html.Div(id=f'selected-period-{type_page}', className='filters-label',
+                                     style={'display': 'none'}),
                         ]
                     ),
-                    style={"width": "100%", "padding": "0rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)", "border-radius": "10px"}
+                    style={"width": "100%", "padding": "0rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                           "border-radius": "10px"}
                 ),
                 width=12
             ),
@@ -71,26 +76,74 @@ tab1_doctor_talon_layout = html.Div(
                 dbc.Card(
                     dbc.CardBody(
                         [
-                            html.H2("Амбулаторная помощь", className="card-title mb-4"),
+                            dbc.CardHeader("Амбулаторная помощь"),
                             html.Div(
                                 dash_table.DataTable(
-                                    id=f'result-table2-{type_page}',
+                                    id=f'result-table1-{type_page}',
                                     style_table={'overflowX': 'auto'},
-                                    style_cell={'minWidth': '0px', 'maxWidth': '180px', 'whiteSpace': 'normal'}  # Ограничение ширины ячеек
+                                    style_cell={'minWidth': '0px', 'maxWidth': '180px', 'whiteSpace': 'normal'}
                                 ),
                                 style={"maxWidth": "100%", "overflowX": "auto"}
                             )
                         ]
                     ),
-                    style={"width": "100%", "padding": "0rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)", "border-radius": "10px"}
+                    style={"width": "100%", "padding": "0rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                           "border-radius": "10px"}
                 ),
                 width=12
             ),
             style={"margin": "0 auto", "padding": "0rem"}
-        )
+        ),
+        dbc.Row(
+            dbc.Col(
+                dbc.Card(
+                    dbc.CardBody(
+                        [
+                            dbc.CardHeader("Диспансеризация"),
+                            html.Div(
+                                dash_table.DataTable(
+                                    id=f'result-table2-{type_page}',
+                                    style_table={'overflowX': 'auto'},
+                                    style_cell={'minWidth': '0px', 'maxWidth': '180px', 'whiteSpace': 'normal'}
+                                ),
+                                style={"maxWidth": "100%", "overflowX": "auto"}
+                            )
+                        ]
+                    ),
+                    style={"width": "100%", "padding": "0rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                           "border-radius": "10px"}
+                ),
+                width=12
+            ),
+            style={"margin": "0 auto", "padding": "0rem"}
+        ),
+        dbc.Row(
+            dbc.Col(
+                dbc.Card(
+                    dbc.CardBody(
+                        [
+                            dbc.CardHeader("Стационары"),
+                            html.Div(
+                                dash_table.DataTable(
+                                    id=f'result-table3-{type_page}',
+                                    style_table={'overflowX': 'auto'},
+                                    style_cell={'minWidth': '0px', 'maxWidth': '180px', 'whiteSpace': 'normal'}
+                                ),
+                                style={"maxWidth": "100%", "overflowX": "auto"}
+                            )
+                        ]
+                    ),
+                    style={"width": "100%", "padding": "0rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                           "border-radius": "10px"}
+                ),
+                width=12
+            ),
+            style={"margin": "0 auto", "padding": "0rem"}
+        ),
     ],
     style={"padding": "0rem"}
 )
+
 
 @app.callback(
     [Output(f'dropdown-doctor-{type_page}', 'options'),
@@ -111,21 +164,30 @@ def update_dropdown(selected_doctor, selected_months_range, selected_year):
 
     return dropdown_options, selected_item_text, selected_period
 
+
 @app.callback(
-    [Output(f'result-table2-{type_page}', 'columns'),
-     Output(f'result-table2-{type_page}', 'data')],
+    [Output(f'result-table1-{type_page}', 'columns'),
+     Output(f'result-table1-{type_page}', 'data'),
+     Output(f'result-table2-{type_page}', 'columns'),
+     Output(f'result-table2-{type_page}', 'data'),
+     Output(f'result-table3-{type_page}', 'columns'),
+     Output(f'result-table3-{type_page}', 'data')
+     ],
     [Input(f'dropdown-doctor-{type_page}', 'value'),
      Input(f'selected-period-{type_page}', 'children')]
 )
-def update_table_amb(value_doctor, selected_period):
+def update_table_dd(value_doctor, selected_period):
     if value_doctor is None or not selected_period:
-        return [], []
+        return [], [], [], [], [], []
 
     months_placeholder = ', '.join([f"'{month}'" for month in selected_period])
-    sql_query = sql_query_amb_def(months_placeholder)
     bind_params = {
         'value_doctor': value_doctor
     }
+    columns1, data1 = TableUpdater.query_to_df(engine, sql_query_amb_def(months_placeholder), bind_params)
+    columns2, data2 = TableUpdater.query_to_df(engine, sql_query_dd_def(months_placeholder), bind_params)
+    columns3, data3 = TableUpdater.query_to_df(engine, sql_query_stac_def(months_placeholder), bind_params)
 
-    columns, data = TableUpdater.query_to_df(engine, sql_query, bind_params)
-    return columns, data
+    return columns1, data1, columns2, data2, columns3, data3
+
+
