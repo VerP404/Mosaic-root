@@ -1,4 +1,7 @@
 from sqlalchemy import text
+from datetime import datetime
+
+current_year = datetime.now().year
 
 
 # Получаем список специальностей
