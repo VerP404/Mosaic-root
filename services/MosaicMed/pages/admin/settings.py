@@ -164,12 +164,12 @@ html.Div([
                     dbc.Button("Сохранить изменения", id="save-departments-button", color="primary", className="mr-2",
                                style={"width": "100%"})
                 ]),
-                style={"width": "100%", "padding": "2rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                style={"width": "100%", "padding": "0rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
                        "border-radius": "10px"}
             )
         ], width=12)
-    ], style={"margin": "0 auto", "padding": "2rem"})
-], style={"padding": "1rem"})
+    ], style={"margin": "0 auto", "padding": "0rem"})
+], style={"padding": "0rem"})
 ])
 
 @app.callback(
