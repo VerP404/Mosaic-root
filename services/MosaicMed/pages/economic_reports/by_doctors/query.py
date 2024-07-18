@@ -45,8 +45,8 @@ from (SELECT *, "Подразделение" || ' ' || split_part("Врач", ' 
                  ELSE
                      "Врач (Профиль МП)"
                  END AS "Корпус Врач"
-      FROM oms_data) as oms
-WHERE (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+      FROM oms.oms_data) as oms
+WHERE "Отчетный период выгрузки" IN ({sql_cond})
   AND "Статус" IN :status_list
   AND "Тариф" != '0'
 group by "ФИО Врача", "Корпус", "Профиль"
@@ -71,8 +71,8 @@ def sql_query_by_doctors_stac_rep(sql_cond=None):
         
         from (SELECT *, split_part("Врач", ' ', 2) || ' ' || left(split_part("Врач", ' ', 3), 1) ||
                      '.' || left(split_part("Врач", ' ', 4), 1) || '.' AS "Корпус Врач"
-              FROM oms_data) as oms
-        WHERE (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+              FROM oms.oms_data) as oms
+        WHERE "Отчетный период выгрузки" IN ({sql_cond})
               AND "Статус" IN :status_list
               AND "Тариф" != '0'
               and "Тип талона" = 'Стационар'

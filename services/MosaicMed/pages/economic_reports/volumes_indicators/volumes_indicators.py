@@ -1,10 +1,10 @@
 import pandas as pd
 from sqlalchemy import text
 import dash_bootstrap_components as dbc
-from app import engine
+from database.db_conn import engine
 from dash import html, dash_table
 
-from pages.economic_reports.volumes_indicators.query import sql_query_pgg_amb, sql_query_pgg_dd, sql_query_pgg_ds
+from services.MosaicMed.pages.economic_reports.volumes_indicators.query import sql_query_pgg_amb, sql_query_pgg_dd, sql_query_pgg_ds
 
 
 def pgg_amb(eng, sql_query):

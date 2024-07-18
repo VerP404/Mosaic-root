@@ -1,4 +1,4 @@
-def sql_qery_sv_pod(sql_cond=None):
+def sql_qery_sv_pod(sql_cond):
     return f"""
 
     SELECT CASE
@@ -10,8 +10,8 @@ def sql_qery_sv_pod(sql_cond=None):
                END                                                 AS "Цель",
            COUNT(*)                                                AS "К-во",
            ROUND(SUM(CAST("Тариф" AS numeric(10, 2)))::numeric, 2) as "Сумма"
-    FROM oms_data
-    WHERE (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+    FROM oms.oms_data
+    WHERE "Отчетный период выгрузки" IN ({sql_cond})
       AND "Статус" IN :status_list
       AND "Тариф" != '0'
       and "Код СМО" like '360%'
@@ -23,8 +23,8 @@ union all
 SELECT "Цель",
        count(*)                        as "К-во",
        ROUND(SUM(CAST("Тариф" AS numeric(10, 2)))::numeric, 2) as "Сумма"
-FROM oms_data
-WHERE (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" IN ({sql_cond})
   AND "Статус" IN :status_list
   AND "Тариф" != '0'
   and "Код СМО" like '360%'
@@ -42,8 +42,8 @@ SELECT      CASE
     END as Цель_,
        count(*)                        as "К-во",
        ROUND(SUM(CAST("Тариф" AS numeric(10, 2)))::numeric, 2) as "Сумма"
-FROM oms_data
-WHERE (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" IN ({sql_cond})
   AND "Статус" IN :status_list
   AND "Тариф" != '0'
   and "Код СМО" like '360%'
@@ -56,8 +56,8 @@ union all
 SELECT concat("Цель", ' ', "Тариф") as Цель_,
        count(*)                        as "К-во",
        ROUND(SUM(CAST("Тариф" AS numeric(10, 2)))::numeric, 2) as "Сумма"
-FROM oms_data
-WHERE (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" IN ({sql_cond})
   AND "Статус" IN :status_list
   AND "Тариф" != '0'
   and "Код СМО" like '360%'
@@ -74,8 +74,8 @@ SELECT      CASE
     END as Цель_,
        count(*)                        as "К-во",
        ROUND(SUM(CAST("Тариф" AS numeric(10, 2)))::numeric, 2) as "Сумма"
-FROM oms_data
-WHERE (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" IN ({sql_cond})
   AND "Статус" IN :status_list
   AND "Тариф" != '0'
   and "Код СМО" like '360%'
@@ -107,8 +107,8 @@ SELECT CASE
            END                         AS "Цель",
        COUNT(*)                        AS "К-во",
        ROUND(SUM(CAST("Тариф" AS numeric(10, 2)))::numeric, 2) as "Сумма"
-FROM oms_data
-WHERE (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" IN ({sql_cond})
   AND "Статус" IN :status_list
   AND ("Санкции" is null or "Санкции" = '1288.7')
   AND "Цель" = '3'
@@ -139,8 +139,8 @@ select distinct "КСГ",
                 COUNT(*)                        AS "К-во",
                 ROUND(SUM(CAST("Тариф" AS numeric(10, 2)))::numeric, 2) as "Сумма"
 
-from oms_data
-where (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+from oms.oms_data
+where "Отчетный период выгрузки" IN ({sql_cond})
   AND "Статус" IN :status_list
   and "КСГ" is not null
   AND "Тариф" != '0'

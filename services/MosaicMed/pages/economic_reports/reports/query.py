@@ -1,4 +1,4 @@
-def sql_query_econ_1(sql_cond=None):
+def sql_query_econ_1(sql_cond):
     return f"""
         with subquery as (
         SELECT
@@ -29,8 +29,8 @@ def sql_query_econ_1(sql_cond=None):
                 ELSE 0
             END AS Дисп_набл
         FROM
-            oms_data
-        WHERE (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+            oms.oms_data
+        WHERE "Отчетный период выгрузки" IN ({sql_cond})
           AND "Статус" IN :status_list
           AND "Тариф" != '0'
           and "Код СМО" like '360%'
@@ -60,7 +60,7 @@ def sql_query_econ_1(sql_cond=None):
     """
 
 
-def sql_query_econ_2(sql_cond=None):
+def sql_query_econ_2(sql_cond):
     return f"""
 with subquery as (
     SELECT
@@ -88,8 +88,8 @@ with subquery as (
             ELSE 0
         END AS "На дому"
     FROM
-        oms_data
-    WHERE (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+        oms.oms_data
+    WHERE "Отчетный период выгрузки" IN ({sql_cond})
           AND "Статус" IN :status_list
           AND "Цель" in ('В дневном стационаре', 'На дому')
           AND "Тариф" != '0'
@@ -119,13 +119,13 @@ ORDER BY
     END;
     """
 
-def sql_query_econ_3(sql_cond=None):
+def sql_query_econ_3(sql_cond):
     return f"""
         select "Подразделение" as Корпус,
            sum(CASE when "Цель" = 'ПН1' then 1 else 0 end) as ПН1,
            sum(CASE when "Цель" = 'ДС2' then 1 else 0  end) as ДС2
-        from oms_data
-        where (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+        from oms.oms_data
+        where "Отчетный период выгрузки" IN ({sql_cond})
           AND "Статус" IN :status_list
           AND "Цель" in ('ПН1', 'ДС2')
           AND "Тариф" != '0'
@@ -134,7 +134,7 @@ def sql_query_econ_3(sql_cond=None):
         group by ROLLUP(Корпус);
     """
 
-def sql_query_econ_4(sql_cond=None):
+def sql_query_econ_4(sql_cond):
     return f"""
         select case
                     WHEN "Подразделение" = 'ГП №3' THEN 'ГП №3'
@@ -148,8 +148,8 @@ def sql_query_econ_4(sql_cond=None):
                sum(CASE when "Цель" = 'УД1' then 1 else 0  end) as УД1,
                sum(CASE when "Цель" = 'УД2' then 1 else 0  end) as УД2
         
-        from oms_data
-        where (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+        from oms.oms_data
+        where "Отчетный период выгрузки" IN ({sql_cond})
                 AND "Статус" IN :status_list
                 AND "Цель" in ('ДВ4', 'ДВ2', 'ОПВ', 'УД1', 'УД2')
                 AND "Подразделение" in ('ГП №11', 'ГП №3', 'ОАПП №1', 'ОАПП №2')

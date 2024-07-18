@@ -8,6 +8,10 @@ from services.MosaicMed.pages.dispensary.children.tab import app_tabs_dc
 from services.MosaicMed.pages.dispensary.reproductive.tab import app_tabs_reproductive
 from services.MosaicMed.pages.doctors_talon.doctor.tab import app_tabs_doctors
 from services.MosaicMed.pages.doctors_talon.doctors_list.tab import app_tabs_doctors_list
+from services.MosaicMed.pages.economic_reports.by_doctors.tab import app_tabs_by_doctor
+from services.MosaicMed.pages.economic_reports.reports.tab import app_tabs_econ_reports
+from services.MosaicMed.pages.economic_reports.sv_pod.sv_pod import tab_layout_sv_pod
+from services.MosaicMed.pages.economic_reports.volumes_indicators.volumes_indicators import app_pgg_amb
 from services.MosaicMed.pages.it_department.update_database.update_database import tab_layout_it_update_bd
 
 # Проверка доступа для специфичных маршрутов
@@ -17,10 +21,10 @@ routes = {
     "/dispensary/adult": app_tabs_da,
     "/dispensary/children": app_tabs_dc,
     "/dispensary/reproductive": app_tabs_reproductive,
-    "/econ/sv-pod": html.H2("Экономические отчеты1"),
-    "/econ/report": html.H2("Экономические отчеты2"),
-    "/econ/pgg": html.H2("Экономические отчеты3"),
-    "/econ/by-doctor": html.H2("Экономические отчеты4"),
+    "/econ/sv-pod": tab_layout_sv_pod,
+    "/econ/report": app_tabs_econ_reports,
+    "/econ/pgg": app_pgg_amb,
+    "/econ/by-doctor": app_tabs_by_doctor,
     "/econ/by-doctor-cel": html.H2("Экономические отчеты5"),
     "/econ/by-doctor-dispensary": html.H2("Экономические отчеты6"),
     "/econ/new-territories": html.H2("Экономические отчеты7"),
