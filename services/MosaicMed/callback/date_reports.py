@@ -21,3 +21,10 @@ def get_current_reporting_month():
 def update_current_month(n_intervals):
     current_month_num, current_month_name = get_current_reporting_month()
     return current_month_num
+
+
+def get_selected_year(selected_year):
+    if selected_year:
+        return [f"{selected_year}", "-"]
+    else:
+        return []

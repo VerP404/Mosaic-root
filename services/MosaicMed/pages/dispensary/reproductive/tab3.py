@@ -1,9 +1,11 @@
 from dash import html, Input, Output, dash_table, dcc
-from app import app, engine
+from database.db_conn import engine
+from services.MosaicMed.app import app
 import dash_bootstrap_components as dbc
 
-from callback import TableUpdater
-from pages.dispensary.reproductive.query import sqlquery_people_reproductive_tab3
+from services.MosaicMed.callback.callback import TableUpdater
+from services.MosaicMed.generate_pages.elements import card_table
+from services.MosaicMed.pages.dispensary.reproductive.query import sqlquery_people_reproductive_tab3
 
 type_page = "tab3-reproductive"
 
@@ -17,18 +19,8 @@ tab3_reproductive = html.Div(
                 dbc.Button(id=f'get-data-button-{type_page}', n_clicks=0, children='Получить данные'),
                 dcc.Loading(id=f'loading-output-{type_page}', type='default'),
                 html.Hr(),
-                html.Div(
-                    [
-                        dash_table.DataTable(id=f'result-table1-{type_page}',
-                                             columns=[],
-                                             editable=False,
-                                             filter_action="native",
-                                             sort_action="native",
-                                             sort_mode='multi',
-                                             export_format='xlsx',
-                                             export_headers='display',
-                                             ),
-                    ], className='block'),
+                card_table(f'result-table1-{type_page}', "Цель ДР2 — мужчины"),
+
             ],
         )
     ]

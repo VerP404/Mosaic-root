@@ -48,7 +48,7 @@ tab2_layout_da = html.Div(
         card_table(f'result-table4-{type_page}', "Цель УД1 — Первый этап углубленной диспансеризации взрослых"),
         card_table(f'result-table5-{type_page}', "Цель УД2 — Второй этап углубленной диспансеризации взрослых"),
         card_table(f'result-table6-{type_page}', "Цель ДР1 — Первый этап диспансеризации репродуктивного здоровья"),
-        card_table(f'result-table7-{type_page}', "Цель ОПВ — Второй этап диспансеризации репродуктивного здоровья"),
+        card_table(f'result-table7-{type_page}', "Цель ДР2 — Второй этап диспансеризации репродуктивного здоровья"),
     ],
     style={"padding": "0rem"}
 )

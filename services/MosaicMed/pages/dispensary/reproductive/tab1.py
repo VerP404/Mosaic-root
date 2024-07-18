@@ -1,9 +1,11 @@
-from dash import html, dcc, Output, Input, dash_table, State, callback_context
 import dash_bootstrap_components as dbc
-
-from app import app, engine
-from callback import TableUpdater
-from pages.dispensary.reproductive.query import sqlquery_people_reproductive, sqlquery_people_reproductive_all
+from dash import html, dcc, Output, Input, dash_table, State, callback_context
+from datetime import datetime
+from database.db_conn import engine
+from services.MosaicMed.app import app
+from services.MosaicMed.callback.callback import TableUpdater
+from services.MosaicMed.pages.dispensary.reproductive.query import sqlquery_people_reproductive, \
+    sqlquery_people_reproductive_all
 
 type_page = "tab1-reproductive"
 alert_text = """Половозрастная структура прикрепленного населения по корпусам из ИСЗЛ для проведения диспансеризации 
@@ -70,12 +72,12 @@ def data_processing(n_clicks, report_type):
         loading_output = html.Div([dcc.Loading(type="default")])
         if report_type == 'БУЗ ВО \'ВГП №3\'':
             bind_params = ''
-            columns, data = TableUpdater.query_to_df(engine, sqlquery_people_reproductive_all, bind_params)
+            columns, data = TableUpdater.query_to_df(engine, sqlquery_people_reproductive_all(), bind_params)
         else:
             bind_params = {
                 'korp': report_type,
             }
-            columns, data = TableUpdater.query_to_df(engine, sqlquery_people_reproductive, bind_params)
+            columns, data = TableUpdater.query_to_df(engine, sqlquery_people_reproductive(), bind_params)
         return columns, data, loading_output, html.H5(
             f'Половозрастная структура прикрепленного населения по {report_type}')
     else:
