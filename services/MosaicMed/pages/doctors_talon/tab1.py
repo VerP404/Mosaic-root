@@ -1,24 +1,13 @@
-from dash import html, dcc, Output, Input, dash_table
-from datetime import datetime
+from dash import html, Output, Input, dash_table
 import dash_bootstrap_components as dbc
 from database.db_conn import engine
 from services.MosaicMed.app import app
 from services.MosaicMed.callback.callback import get_selected_doctors, TableUpdater
+from services.MosaicMed.generate_pages.filters import filter_years, filter_doctors, filter_months
 from services.MosaicMed.pages.doctors_talon.query import sql_query_amb_def, sql_query_stac_def, sql_query_dd_def
+from services.MosaicMed.utils import months_sql_labels
 
 type_page = "tab1-doctor-talon"
-
-current_year = datetime.now().year
-
-months_labels = {
-    1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель', 5: 'Май', 6: 'Июнь', 7: 'Июль',
-    8: 'Август', 9: 'Сентябрь', 10: 'Октябрь', 11: 'Ноябрь', 12: 'Декабрь'
-}
-
-months_sql_labels = {
-    1: 'Января', 2: 'Февраля', 3: 'Марта', 4: 'Апреля', 5: 'Мая', 6: 'Июня', 7: 'Июля',
-    8: 'Августа', 9: 'Сентября', 10: 'Октября', 11: 'Ноября', 12: 'Декабря'
-}
 
 tab1_doctor_talon_layout = html.Div(
     [
@@ -30,32 +19,13 @@ tab1_doctor_talon_layout = html.Div(
                             dbc.CardHeader("Фильтры"),
                             dbc.Row(
                                 [
-                                    dbc.Col(
-                                        dcc.Dropdown(id=f'dropdown-doctor-{type_page}', options=[],
-                                                     placeholder='Выберите врача...')
-                                    ),
-                                    dbc.Col(
-                                        dcc.Dropdown(options=[
-                                            {'label': '2023', 'value': 2023},
-                                            {'label': '2024', 'value': 2024},
-                                            {'label': '2025', 'value': 2025}
-                                        ], id=f'dropdown-year-{type_page}', placeholder='Выберите год...',
-                                            value=current_year)
-                                    )
+                                    filter_doctors(type_page),  # фильтр по врачам
+                                    filter_years(type_page)  # фильтр по годам
                                 ]
                             ),
                             dbc.Row(
                                 [
-                                    dbc.Col(
-                                        dcc.RangeSlider(
-                                            id=f'range-slider-month-{type_page}',
-                                            min=1,
-                                            max=12,
-                                            marks={i: month for i, month in months_labels.items()},
-                                            value=[1, 12],
-                                            step=1
-                                        )
-                                    )
+                                    filter_months(type_page)  # фильтр по месяцам
                                 ]
                             ),
                             html.Div(id=f'selected-doctor-{type_page}', className='filters-label',
@@ -189,5 +159,3 @@ def update_table_dd(value_doctor, selected_period):
     columns3, data3 = TableUpdater.query_to_df(engine, sql_query_stac_def(months_placeholder), bind_params)
 
     return columns1, data1, columns2, data2, columns3, data3
-
-

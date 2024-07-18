@@ -173,3 +173,4 @@ def sql_query_dd_def(months_placeholder):
                      WHEN 'ДС2' THEN 7
                      END
         """
+
