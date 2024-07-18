@@ -1,8 +1,9 @@
 from dash import html, dcc, Output, Input
 import dash_bootstrap_components as dbc
 from services.MosaicMed.app import app
-from services.MosaicMed.pages.doctors_talon.tab1 import tab1_doctor_talon_layout
-from services.MosaicMed.pages.doctors_talon.tab2 import tab2_doctor_talon_layout
+from services.MosaicMed.pages.doctors_talon.doctor.tab1 import tab1_doctor_talon_layout
+from services.MosaicMed.pages.doctors_talon.doctor.tab2 import tab2_doctor_talon_layout
+from services.MosaicMed.pages.doctors_talon.doctor.tab3 import tab3_doctor_talon_layout
 
 type_page = 'doctors-talon'
 
@@ -15,7 +16,8 @@ app_tabs_doctors = html.Div(
                 dcc.Tabs(
                     [
                         dcc.Tab(label='По отчетному месяцу', value='tab1', selected_className='custom-tab--selected'),
-                        dcc.Tab(label='По дате', value='tab2', selected_className='custom-tab--selected'),
+                        dcc.Tab(label='По дате лечения', value='tab2', selected_className='custom-tab--selected'),
+                        dcc.Tab(label='По дате формирования', value='tab3', selected_className='custom-tab--selected'),
                     ],
                     id='tabs',
                     value='tab1',
@@ -28,6 +30,7 @@ app_tabs_doctors = html.Div(
     ], className='tabs-app'
 )
 
+
 # возвращаем вкладки
 @app.callback(
     Output(f'tabs-{type_page}', 'children'),
@@ -38,5 +41,7 @@ def switch_tab(tab_chose):
         return tab1_doctor_talon_layout
     elif tab_chose == 'tab2':
         return tab2_doctor_talon_layout
+    elif tab_chose == 'tab3':
+        return tab3_doctor_talon_layout
     else:
         return html.H2('Страница не выбрана..')

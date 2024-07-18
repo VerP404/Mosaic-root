@@ -46,9 +46,17 @@ def get_sidebar():
     if current_user.is_authenticated:
         modules = fetch_role_access(current_user.role)
         if 'doctors-report' in modules:
-            nav_items.append(dbc.NavLink(
-                [html.I(className="fas fa-user-md"), html.Span(" Врачи", className="nav-text", title="Врачи")],
-                href="/doctors-report", active="exact", className="nav-item", id="nav-doctors"))
+            nav_items.append(dbc.DropdownMenu(
+                [
+                    dbc.DropdownMenuItem("По врачу", href="/doctors-report/doctor"),
+                    dbc.DropdownMenuItem("Список врачей", href="/doctors-report/list-doctors"),
+                ],
+                label=[html.I(className="fas fa-user-md"),
+                       html.Span(" Врач", className="nav-text", title="Диспансерный учет")],
+                nav=True,
+                id="nav-doctors-report",
+                right=True,
+            ))
         if 'dispensary' in modules:
             nav_items.append(dbc.DropdownMenu(
                 [
