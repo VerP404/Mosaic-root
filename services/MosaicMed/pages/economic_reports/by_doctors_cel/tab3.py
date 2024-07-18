@@ -1,9 +1,10 @@
 from dash import html, dcc, Output, Input, dash_table, exceptions, State
-from app import app, engine
-from callback import get_current_reporting_month, TableUpdater
+from database.db_conn import engine
+from services.MosaicMed.app import app
+from services.MosaicMed.callback.callback import get_current_reporting_month, TableUpdater
 import datetime
 
-from pages.economic_reports.by_doctors_cel.query import sql_query_by_doctors_stac
+from services.MosaicMed.pages.economic_reports.by_doctors_cel.query import sql_query_by_doctors_stac
 
 type_page = "by-doctor-cel-stac"
 
