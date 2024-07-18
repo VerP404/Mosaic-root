@@ -19,7 +19,8 @@ tab3_reproductive = html.Div(
                 dbc.Button(id=f'get-data-button-{type_page}', n_clicks=0, children='Получить данные'),
                 dcc.Loading(id=f'loading-output-{type_page}', type='default'),
                 html.Hr(),
-                card_table(f'result-table1-{type_page}', "Цель ДР2 — мужчины"),
+                card_table(f'result-table1-{type_page}',
+                           "Список пациентов прошедших ДВ4 или ОПВ (по оплаченным) в текущем году"),
 
             ],
         )

@@ -4,6 +4,7 @@ from datetime import datetime
 from database.db_conn import engine
 from services.MosaicMed.app import app
 from services.MosaicMed.callback.callback import TableUpdater
+from services.MosaicMed.generate_pages.elements import card_table
 from services.MosaicMed.pages.dispensary.reproductive.query import sqlquery_people_reproductive, \
     sqlquery_people_reproductive_all
 
@@ -36,20 +37,8 @@ tab1_reproductive = html.Div([
         [
             html.Div(id=f'name-table-{type_page}'),
 
-            dash_table.DataTable(id=f'result-table-{type_page}', columns=[],
-                                 editable=True,
-                                 filter_action="native",
-                                 sort_action="native",
-                                 sort_mode='multi',
-                                 export_format='xlsx',
-                                 export_headers='display',
-                                 style_table={'width': '1200px'},
-                                 style_header={'whiteSpace': 'normal', 'text-align': 'center'},
-                                 style_data={'width': '100px',
-                                             'whiteSpace': 'normal',
-                                             'padding-right': '20px',
-                                             'text-align': 'right', },
-                                 ),
+            card_table(f'result-table-{type_page}', "Половозрастная структура прикрепленного населения по корпусам из ИСЗЛ для проведения репродуктивной диспансеризации"),
+
         ], className='block'),
 
 ])
