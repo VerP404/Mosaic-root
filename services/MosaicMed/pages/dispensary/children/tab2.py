@@ -1,77 +1,76 @@
-from dash import html, dcc, Output, Input, dash_table
-from app import app, engine
-from callback import get_current_reporting_month, get_filter_month, TableUpdater
+from datetime import datetime
 
-from pages.dispensary.children.query import sql_query_pn_uniq_tab2
+from dash import html, Output, Input
+import dash_bootstrap_components as dbc
+from database.db_conn import engine
+from services.MosaicMed.app import app
+from services.MosaicMed.callback.callback import TableUpdater
+from services.MosaicMed.generate_pages.elements import card_table
+from services.MosaicMed.generate_pages.filters import filter_years, filter_months
+from services.MosaicMed.pages.dispensary.children.query import sql_query_pn_talon, sql_query_pn_uniq
 
 type_page = "tab2-dc"
 
+
+def get_selected_year(selected_year):
+    if selected_year:
+        return [f"{selected_year}", "-"]
+    else:
+        return []
+
+
 tab2_layout_dc = html.Div(
     [
-        dcc.Store(id=f'current-month-number-{type_page}'),
-        # Блок 1: Выбор элемента из списка
-        html.Div(
-            [
-                html.H3('Фильтры', className='label'),
-                html.Div(
-                    [
-                        dcc.Dropdown({1: '01 - Январь', 2: '02 - Февраль', 3: '03 - Март',
-                                      4: '04 - Апрель', 5: '05 - Май', 6: '06 - Июнь',
-                                      7: '07 - Июль', 8: '08 - Август', 9: '09 - Сентябрь',
-                                      10: '10 - Октябрь', 11: '11 - Ноябрь', 12: '12 - Декабрь'},
-                                     id=f'dropdown-month-{type_page}', placeholder='Выберите месяц...'),
-                    ], className='filters'),
-                html.Div(id=f'current-month-name-{type_page}', className='filters-label'),
-                html.Div(id=f'selected-month-{type_page}', className='filters-label', style={'display': 'none'}),
-            ], className='filter'),
-        # Блок 2: Таблица с БСК
-        html.Div(
-            [
-                html.H3('Талоны и уникальные пациенты в текущем году', className='label'),
-                dash_table.DataTable(id=f'result-table1-{type_page}', columns=[],
-                                     editable=True,
-                                     export_format='xlsx',
-                                     export_headers='display'),
-            ], className='block'),
-    ]
+        dbc.Row(
+            dbc.Col(
+                dbc.Card(
+                    dbc.CardBody(
+                        [
+                            dbc.CardHeader("Фильтры"),
+                            dbc.Row(
+                                [
+                                    filter_years(type_page)  # фильтр по годам
+                                ]
+                            ),
+                            html.Div(id=f'selected-period-{type_page}', className='filters-label',
+                                     style={'display': 'none'}),
+                            html.Div(id=f'current-month-name-{type_page}', className='filters-label'),
+                        ]
+                    ),
+                    style={"width": "100%", "padding": "0rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                           "border-radius": "10px"}
+                ),
+                width=12
+            ),
+            style={"margin": "0 auto", "padding": "0rem"}
+        ),
+        card_table(f'result-table1-{type_page}', "Карты профосмотров"),
+        card_table(f'result-table2-{type_page}', "Уникальные пациенты в картах"),
+    ],
+    style={"padding": "0rem"}
 )
 
 
-# Определяем отчетный месяц и выводим его на страницу и в переменную dcc Store
 @app.callback(
-    Output(f'current-month-number-{type_page}', 'data'),
-    Output(f'current-month-name-{type_page}', 'children'),
-    [Input('date-interval', 'n_intervals')]
+    Output(f'selected-period-{type_page}', 'children'),
+    Input(f'dropdown-year-{type_page}', 'value')
 )
-def update_current_month(n_intervals):
-    current_month_num, current_month_name = get_current_reporting_month()
-    return current_month_num, current_month_name
-
-
-# фильтр: по месяцам
-@app.callback(
-    Output(f'selected-month-{type_page}', 'children'),
-    Input(f'dropdown-month-{type_page}', 'value'),
-)
-def update_filter(selected_month):
-    return get_filter_month(selected_month)
+def update_selected_period(selected_year):
+    return get_selected_year(selected_year)
 
 
 @app.callback(
     [Output(f'result-table1-{type_page}', 'columns'),
-     Output(f'result-table1-{type_page}', 'data')],
-    Input(f'dropdown-month-{type_page}', 'value')
+     Output(f'result-table1-{type_page}', 'data'),
+     Output(f'result-table2-{type_page}', 'columns'),
+     Output(f'result-table2-{type_page}', 'data')],
+    [Input(f'selected-period-{type_page}', 'children')]
 )
-def update_table(value_month):
-    if value_month is None:
-        return [], []
-    if value_month in ("10", "11", "12"):
-        value_month = f'%/{value_month}/%'
-    else:
-        value_month = f'%/0{value_month}/%'
-    bind_params = {
-        'month': value_month,
-    }
-    columns, data = TableUpdater.query_to_df(engine, sql_query_pn_uniq_tab2, bind_params)
+def update_table_dd(selected_period):
+    if not selected_period:
+        return [], [], [], []
 
-    return columns, data
+    year_placeholder = selected_period[0]
+    columns1, data1 = TableUpdater.query_to_df(engine, sql_query_pn_talon(year_placeholder))
+    columns2, data2 = TableUpdater.query_to_df(engine, sql_query_pn_uniq(year_placeholder))
+    return columns1, data1, columns2, data2

@@ -4,6 +4,7 @@ from services.MosaicMed.pages.admin.settings import settings_layout
 from services.MosaicMed.pages.admin.users import users_layout
 from services.MosaicMed.pages.admin.roles import roles_layout
 from services.MosaicMed.pages.dispensary.adults.tab import app_tabs_da
+from services.MosaicMed.pages.dispensary.children.tab import app_tabs_dc
 from services.MosaicMed.pages.doctors_talon.doctor.tab import app_tabs_doctors
 from services.MosaicMed.pages.doctors_talon.doctors_list.tab import app_tabs_doctors_list
 from services.MosaicMed.pages.it_department.update_database.update_database import tab_layout_it_update_bd
@@ -13,7 +14,7 @@ routes = {
     "/doctors-report/doctor": app_tabs_doctors,
     "/doctors-report/list-doctors": app_tabs_doctors_list,
     "/dispensary/adult": app_tabs_da,
-    "/dispensary/children": html.H2("Дети"),
+    "/dispensary/children": app_tabs_dc,
     "/dispensary/reproductive": html.H2("Репродуктивное"),
     "/econ/sv-pod": html.H2("Экономические отчеты1"),
     "/econ/report": html.H2("Экономические отчеты2"),
