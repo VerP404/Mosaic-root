@@ -7,12 +7,12 @@ from services.MosaicMed.app import app
 from services.MosaicMed.callback.callback import TableUpdater, get_selected_dates
 from services.MosaicMed.generate_pages.elements import card_table
 from services.MosaicMed.generate_pages.filters import filter_status, date_start, date_end
-from services.MosaicMed.pages.doctors_talon.doctors_list.query import sql_query_by_doc_end_form
+from services.MosaicMed.pages.dispensary.adults.query import sql_query_adults_age_dispensary
 from services.MosaicMed.generate_pages.constants import status_groups
 
-type_page = "tab3-doctor-talon-list"
+type_page = "tab3-da"
 
-tab3_doctor_talon_list = html.Div(
+tab3_layout_da = html.Div(
     [
         dbc.Row(
             dbc.Col(
@@ -32,7 +32,6 @@ tab3_doctor_talon_list = html.Div(
                                 ]
                             ),
 
-                            html.Button('Получить данные', id=f'get-data-button-{type_page}'),
                             dcc.Loading(id=f'loading-output-{type_page}', type='default'),
                         ]
                     ),
@@ -43,7 +42,7 @@ tab3_doctor_talon_list = html.Div(
             ),
             style={"margin": "0 auto", "padding": "0rem"}
         ),
-        card_table(f'result-table-{type_page}', "Талоны по врачам")
+        card_table(f'result-table-{type_page}', "Отчет по диспансеризации и профосмотрам взрослых с разбивкой по возрастам")
     ],
     style={"padding": "0rem"}
 )
@@ -77,6 +76,6 @@ def update_table_dd(start_date, end_date, selected_status):
         'end_date': end_date_formatted,
         'status_list': selected_status_tuple
     }
-    columns, data = TableUpdater.query_to_df(engine, sql_query_by_doc_end_form(), bind_params)
+    columns, data = TableUpdater.query_to_df(engine, sql_query_adults_age_dispensary(), bind_params)
 
     return columns, data
