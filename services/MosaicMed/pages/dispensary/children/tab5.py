@@ -16,7 +16,7 @@ tab5_layout_children_list_not_pn = html.Div(
                 dbc.Button(id=f'get-data-button-{type_page}', n_clicks=0, children='Получить данные'),
                 dcc.Loading(id=f'loading-output-{type_page}', type='default'),
                 card_table(f'result-table-{type_page}',
-                           "Список прикрепленных детей без профилактического осмотра (ПН1)"),
+                           "Список прикрепленных детей без профилактического осмотра (ПН1)", 15),
 
             ], className='block'),
     ]

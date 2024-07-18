@@ -513,7 +513,7 @@ with flu as (select *,
                      "Имя",
                      "Отчество",
                      "Дата рождения",
-                     detail_dd_data."ЕНП",
+                     detaildd_data."ЕНП",
                      "Доктор (ФИО)",
                      "Доктор (Код)",
                      "Дата начала",
@@ -524,8 +524,8 @@ with flu as (select *,
                      flu_nas_vse."Дата" as "Дата флюры"
 
 
-              from oms.detail_dd_data
-                       left join flu_nas_vse on oms.detail_dd_data."ЕНП" = flu_nas_vse."ЕНП"
+              from oms.detaildd_data
+                       left join flu_nas_vse on oms.detaildd_data."ЕНП" = flu_nas_vse."ЕНП"
               where "Название услуги" like 'Флюоро%'),
     it2 as (
 

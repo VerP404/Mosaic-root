@@ -2,17 +2,18 @@
 def sql_query_pn():
     return f"""
     select coalesce("Подразделение", 'Итого')               as Корпус,
-           sum(case when "Статус" = '1' then 1 else 0 end)  as Статус_1,
-           sum(case when "Статус" = '2' then 1 else 0 end)  as Статус_2,
-           sum(case when "Статус" = '3' then 1 else 0 end)  as Статус_3,
-           sum(case when "Статус" = '5' then 1 else 0 end)  as Статус_5,
-           sum(case when "Статус" = '6' then 1 else 0 end)  as Статус_6,
-           sum(case when "Статус" = '7' then 1 else 0 end)  as Статус_7,
-           sum(case when "Статус" = '8' then 1 else 0 end)  as Статус_8,
-           sum(case when "Статус" = '12' then 1 else 0 end) as Статус_12,
-           sum(case when "Статус" = '13' then 1 else 0 end) as Статус_13,
-           sum(case when "Статус" = '17' then 1 else 0 end) as Статус_17,
-           sum(case when "Статус" = '0' then 1 else 0 end)  as Статус_0,
+           sum(case when "Статус" = '1' then 1 else 0 end)  as "1",
+           sum(case when "Статус" = '2' then 1 else 0 end)  as "2",
+           sum(case when "Статус" = '3' then 1 else 0 end)  as "3",
+           sum(case when "Статус" = '4' then 1 else 0 end)  as "4",
+           sum(case when "Статус" = '5' then 1 else 0 end)  as "5",
+           sum(case when "Статус" = '6' then 1 else 0 end)  as "6",
+           sum(case when "Статус" = '7' then 1 else 0 end)  as "7",
+           sum(case when "Статус" = '8' then 1 else 0 end)  as "8",
+           sum(case when "Статус" = '12' then 1 else 0 end) as "12",
+           sum(case when "Статус" = '13' then 1 else 0 end) as "13",
+           sum(case when "Статус" = '17' then 1 else 0 end) as "17",
+           sum(case when "Статус" = '0' then 1 else 0 end)  as "0",
            sum(case
                    when "Статус" = '0' or "Статус" = '1' or "Статус" = '2' or "Статус" = '3' or "Статус" = '5'
                        or "Статус" = '6' or "Статус" = '7' or "Статус" = '8' or "Статус" = '12' or "Статус" = '13' or
@@ -32,17 +33,18 @@ def sql_query_pn():
 def sql_query_ds2():
     return f"""
         select coalesce("Подразделение", 'Итого')               as Корпус,
-               sum(case when "Статус" = '1' then 1 else 0 end)  as Статус_1,
-               sum(case when "Статус" = '2' then 1 else 0 end)  as Статус_2,
-               sum(case when "Статус" = '3' then 1 else 0 end)  as Статус_3,
-               sum(case when "Статус" = '5' then 1 else 0 end)  as Статус_5,
-               sum(case when "Статус" = '6' then 1 else 0 end)  as Статус_6,
-               sum(case when "Статус" = '7' then 1 else 0 end)  as Статус_7,
-               sum(case when "Статус" = '8' then 1 else 0 end)  as Статус_8,
-               sum(case when "Статус" = '12' then 1 else 0 end) as Статус_12,
-               sum(case when "Статус" = '13' then 1 else 0 end) as Статус_13,
-               sum(case when "Статус" = '17' then 1 else 0 end) as Статус_17,
-               sum(case when "Статус" = '0' then 1 else 0 end)  as Статус_0,
+           sum(case when "Статус" = '1' then 1 else 0 end)  as "1",
+           sum(case when "Статус" = '2' then 1 else 0 end)  as "2",
+           sum(case when "Статус" = '3' then 1 else 0 end)  as "3",
+           sum(case when "Статус" = '4' then 1 else 0 end)  as "4",
+           sum(case when "Статус" = '5' then 1 else 0 end)  as "5",
+           sum(case when "Статус" = '6' then 1 else 0 end)  as "6",
+           sum(case when "Статус" = '7' then 1 else 0 end)  as "7",
+           sum(case when "Статус" = '8' then 1 else 0 end)  as "8",
+           sum(case when "Статус" = '12' then 1 else 0 end) as "12",
+           sum(case when "Статус" = '13' then 1 else 0 end) as "13",
+           sum(case when "Статус" = '17' then 1 else 0 end) as "17",
+           sum(case when "Статус" = '0' then 1 else 0 end)  as "0",
                sum(case
                        when "Статус" = '0' or "Статус" = '1' or "Статус" = '2' or "Статус" = '3' or "Статус" = '5'
                            or "Статус" = '6' or "Статус" = '7' or "Статус" = '8' or "Статус" = '12' or "Статус" = '13' or

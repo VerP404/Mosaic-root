@@ -47,7 +47,7 @@ tab1_doctor_talon_list = html.Div(
             ),
             style={"margin": "0 auto", "padding": "0rem"}
         ),
-        card_table(f'result-table-{type_page}', "Талоны по врачам")
+        card_table(f'result-table-{type_page}', "Талоны по врачам", 15)
     ],
     style={"padding": "0rem"}
 )

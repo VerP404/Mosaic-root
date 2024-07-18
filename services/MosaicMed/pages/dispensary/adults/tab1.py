@@ -5,6 +5,7 @@ from database.db_conn import engine
 from services.MosaicMed.app import app
 
 from services.MosaicMed.callback.callback import get_selected_dates, TableUpdater
+from services.MosaicMed.generate_pages.elements import card_table
 from services.MosaicMed.pages.dispensary.adults.query import sql_query_dispensary
 
 type_page = "tab1-da"
@@ -42,11 +43,7 @@ tab1_layout_da = html.Div(
                 html.Div(id=f'selected-date-{type_page}', className='filters-label'),
             ], className='filter'),
         # Блок 2: Диспансеризация
-        html.Div(
-            [
-                html.H3('Диспансеризация взрослых', className='label'),
-                dash_table.DataTable(id=f'result-table-{type_page}', columns=[]),
-            ], className='block'),
+        card_table(f'result-table-{type_page}', "Диспансеризация взрослых"),
     ]
 )
 
