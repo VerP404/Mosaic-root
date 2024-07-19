@@ -4,8 +4,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2))ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/01/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Января%'
     AND "Статус" IN ('2', '3')
 GROUP BY "Месяц"
 UNION ALL
@@ -14,8 +14,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/02/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Февраля%'
     AND "Статус" IN ('2', '3')
 GROUP BY "Месяц"
 UNION ALL
@@ -24,8 +24,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/03/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Марта%'
     AND "Статус" IN ('2', '3')
 GROUP BY "Месяц"
 UNION ALL
@@ -34,8 +34,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/04/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Апреля%'
     AND "Статус" IN ('2', '3')
 GROUP BY "Месяц"
 UNION ALL
@@ -44,8 +44,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/05/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Мая%'
     AND "Статус" IN ('2', '3')
 GROUP BY "Месяц"
 UNION ALL
@@ -54,8 +54,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/06/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Июня%'
     AND "Статус" IN ('2', '3')
 GROUP BY "Месяц"
 UNION ALL
@@ -64,8 +64,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/07/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Июля%'
     AND "Статус" IN ('2', '3')
 GROUP BY "Месяц"
 UNION ALL
@@ -74,8 +74,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/08/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Августа%'
     AND "Статус" IN ('2', '3')
 GROUP BY "Месяц"
 UNION ALL
@@ -84,8 +84,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/09/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Сентября%'
     AND "Статус" IN ('2', '3')
 GROUP BY "Месяц"
 UNION ALL
@@ -94,8 +94,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/10/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Октября%'
     AND "Статус" IN ('2', '3')
     and "Санкции" is null
 GROUP BY "Месяц"
@@ -105,8 +105,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/11/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Ноября%'
     AND "Статус" IN ('2', '3')
     and "Санкции" is null
 GROUP BY "Месяц"
@@ -116,8 +116,8 @@ SELECT
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36065' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Инко-Мед",
     TO_CHAR(sum(CASE WHEN "Код СМО" = '36071' THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "СОГАЗ",
     TO_CHAR(sum(CASE WHEN "Код СМО" in ('36071','36065') THEN CAST("Сумма" AS numeric(10, 2)) ELSE 0 END)::numeric, 'FM999999990.00') as "Итого"
-FROM oms_data
-WHERE "Номер счёта" LIKE '%/12/%'
+FROM oms.oms_data
+WHERE "Отчетный период выгрузки" LIKE '%Декабря%'
     AND "Статус" IN ('2', '3')
     and "Санкции" is null
 GROUP BY "Месяц"

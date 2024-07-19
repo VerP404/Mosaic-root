@@ -19,6 +19,7 @@ from services.MosaicMed.pages.economic_reports.stationary.tab import stationary
 from services.MosaicMed.pages.economic_reports.sv_pod.sv_pod import tab_layout_sv_pod
 from services.MosaicMed.pages.economic_reports.volumes_indicators.volumes_indicators import app_pgg_amb
 from services.MosaicMed.pages.it_department.cel_3.tab import app_tabs_cel3
+from services.MosaicMed.pages.it_department.for_smo.for_smo import tab_layout_for_smo
 from services.MosaicMed.pages.it_department.generation_invoices.generation_invoices import tab_layout_other_gen_invoices
 from services.MosaicMed.pages.it_department.status_months.status_months import tab_layout_other_stat_months
 from services.MosaicMed.pages.it_department.update_database.update_database import tab_layout_it_update_bd
@@ -43,7 +44,7 @@ routes = {
     "/it/gen-invoices": tab_layout_other_gen_invoices,
     "/it/update-bd": tab_layout_it_update_bd,
     "/it/stat-months": tab_layout_other_stat_months,
-    "/it/for-smo": html.H2("it4"),
+    "/it/for-smo": tab_layout_for_smo,
     "/it/cel3": app_tabs_cel3,
     "/admin/users": users_layout,
     "/admin/roles": roles_layout(),
