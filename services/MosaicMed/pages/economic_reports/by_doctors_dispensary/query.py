@@ -1,4 +1,4 @@
-def sql_query_by_doctor_dispensary_adult_f1(sql_cond=None):
+def sql_query_by_doctor_dispensary_adult_f1(sql_cond):
     return f"""
 with oms as (select "Врач",
                     "Врач (Профиль МП)",
@@ -8,8 +8,8 @@ with oms as (select "Врач",
                     "Подразделение",
                     split_part("Врач", ' ', 2) || ' ' || left(split_part("Врач", ' ', 3), 1) ||
                     '.' || left(split_part("Врач", ' ', 4), 1) || '.' || ' / ' || "Врач (Профиль МП)" as "ВР/проф_омс"
-             from oms_data
-             where ("Номер счёта" LIKE ANY (:list_months) {sql_cond})
+             from oms.oms_data
+             where "Отчетный период выгрузки" IN ({sql_cond})
                AND "Статус" IN :status_list
                and "Тип талона" like '%Диспа%'
                and "Подразделение" not like '%ДП%'),
@@ -41,9 +41,10 @@ ORDER BY all_combinations."Подразделение", "Врач / профил
 """
 
 
-def sql_query_by_doctor_dispensary_adult_f2(sql_cond=None):
+def sql_query_by_doctor_dispensary_adult_f2(sql_cond):
     return f"""
-with detail as (select detail_dd_data."Пол",
+with detail as (select oms.detail_dd_data."Пол",
+                       "Номер талона",
                        "Тип талона",
                        "Доктор (Код)",
                        "Доктор (ФИО)",
@@ -51,37 +52,49 @@ with detail as (select detail_dd_data."Пол",
                        "Статус-Услуги",
                        "Доктор-Услуги (Код)",
                        "Доктор-Услуги (ФИО)",
-                       doctors_oms_data."Структурное подразделение:" as "Корпус",
-                       doctors_oms_data."Код профиля медпомощи:" as "Профиль"
-                from detail_dd_data
-                         left join doctors_oms_data on detail_dd_data."Доктор (Код)" = doctors_oms_data."Код врача:"
-                where ("Счет" LIKE ANY (:list_months) {sql_cond})
-                  and "Статус" IN :status_list
-                and "Статус-Услуги" = 'Да'
-                and "Тип талона" in ('ДВ4', 'ДВ2', 'ОПВ', 'УД1', 'УД2'))
+                       oms.doctors_oms_data."Структурное подразделение:" as "Корпус",
+                       oms.doctors_oms_data."Код профиля медпомощи:" as "Профиль"
+                from oms.detail_dd_data
+                         left join oms.doctors_oms_data on oms.detail_dd_data."Доктор (Код)" = oms.doctors_oms_data."Код врача:"
+                where  "Статус-Услуги" = 'Да'
+                and "Статус" IN :status_list
+                and "Тип талона" in ('ДВ4', 'ДВ2', 'ОПВ', 'УД1', 'УД2')),
+    oms as (
+        select "Талон",
+               "Отчетный период выгрузки"
+        from oms.oms_data
+        where "Цель" in ('ДВ4', 'ДВ2', 'ОПВ', 'УД1', 'УД2')
+        and "Статус" IN :status_list
+    ),
+    detail_oms as (
+        select *
+        from detail left join oms on "Номер талона" =oms."Талон"
+    )
 
-select "Корпус",
-       "Тип талона" as "Цель",
-       "Название услуги" as "Услуга",
-       sum(case when "Пол" = 'М' then 1 else 0 end)         as "К-во М",
-       sum(case when "Пол" = 'Ж' then 1 else 0 end)         as "К-во Ж",
-       sum(case when "Пол" in ('М', 'Ж') then 1 else 0 end) as "К-во"
-from detail
-group by "Корпус", "Тип талона", "Услуга"
-order by "Корпус",     CASE "Тип талона"
+    select "Корпус",
+           "Тип талона" as "Цель",
+           "Название услуги" as "Услуга",
+           sum(case when "Пол" = 'М' then 1 else 0 end)         as "К-во М",
+           sum(case when "Пол" = 'Ж' then 1 else 0 end)         as "К-во Ж",
+           sum(case when "Пол" in ('М', 'Ж') then 1 else 0 end) as "К-во"
+    from detail_oms
+    where "Отчетный период выгрузки" IN ({sql_cond})
+    group by "Корпус", "Тип талона", "Услуга"
+    order by "Корпус",     CASE "Тип талона"
         WHEN 'ДВ4' THEN 1
         WHEN 'ДВ2' THEN 2
         WHEN 'ОПВ' THEN 3
         WHEN 'УД1' THEN 4
         WHEN 'УД2' THEN 5
         ELSE 6
-    END, "Услуга"
+        END, "Услуга"
 """
 
 
-def sql_query_by_doctor_dispensary_adult_f3(sql_cond=None):
+def sql_query_by_doctor_dispensary_adult_f3(sql_cond):
     return f"""
-with detail as (select detail_dd_data."Пол",
+with detail as (select oms.detail_dd_data."Пол",
+                       "Номер талона",
                        "Тип талона",
                        "Доктор (Код)",
                        "Доктор (ФИО)",
@@ -89,17 +102,27 @@ with detail as (select detail_dd_data."Пол",
                        "Статус-Услуги",
                        "Доктор-Услуги (Код)",
                        "Доктор-Услуги (ФИО)",
-                       doctors_oms_data."Структурное подразделение:" as "Корпус",
-                                              CASE 
-                        WHEN doctors_oms_data."Код профиля медпомощи:" LIKE '%136 акушерству и гинекологии (за исключением использования вспомогательных репродуктивных технологий и искусственного прерывания беременности)%'
+                       oms.doctors_oms_data."Структурное подразделение:" as "Корпус",
+                                              CASE
+                        WHEN oms.doctors_oms_data."Код профиля медпомощи:" LIKE '%136 акушерству и гинекологии (за исключением использования вспомогательных репродуктивных технологий и искусственного прерывания беременности)%'
                         THEN 'акушерство и гинекология'
-                        ELSE doctors_oms_data."Код профиля медпомощи:" END as "Профиль"
-                from detail_dd_data
-                         left join doctors_oms_data on detail_dd_data."Доктор-Услуги (Код)" = doctors_oms_data."Код врача:"
-                where ("Счет"LIKE ANY (:list_months) {sql_cond})
-                  and "Статус" IN :status_list
-                and "Статус-Услуги" = 'Да'
-                and "Тип талона" in ('ДВ4', 'ДВ2', 'ОПВ', 'УД1', 'УД2'))
+                        ELSE oms.doctors_oms_data."Код профиля медпомощи:" END as "Профиль"
+                from oms.detail_dd_data
+                         left join oms.doctors_oms_data on oms.detail_dd_data."Доктор-Услуги (Код)" = oms.doctors_oms_data."Код врача:"
+                where  "Статус-Услуги" = 'Да'
+                AND "Статус" IN :status_list
+                and "Тип талона" in ('ДВ4', 'ДВ2', 'ОПВ', 'УД1', 'УД2')),
+    oms as (
+        select "Талон",
+               "Отчетный период выгрузки"
+        from oms.oms_data
+        where "Цель" in ('ДВ4', 'ДВ2', 'ОПВ', 'УД1', 'УД2')
+        AND "Статус" IN :status_list
+    ),
+    detail_oms as (
+        select *
+        from detail left join oms on "Номер талона" =oms."Талон"
+    )
 
 select "Корпус",
        "Тип талона" as "Цель",
@@ -107,7 +130,8 @@ select "Корпус",
        sum(case when "Пол" = 'М' then 1 else 0 end)         as "К-во М",
        sum(case when "Пол" = 'Ж' then 1 else 0 end)         as "К-во Ж",
        sum(case when "Пол" in ('М', 'Ж') then 1 else 0 end) as "К-во"
-from detail
+from detail_oms
+where "Отчетный период выгрузки" IN ({sql_cond})
 group by "Корпус", "Тип талона", "Врач/профиль"
 order by "Корпус", CASE "Тип талона"
         WHEN 'ДВ4' THEN 1
@@ -121,7 +145,7 @@ order by "Корпус", CASE "Тип талона"
 
 
 
-def sql_query_by_doctor_dispensary_children_f1(sql_cond=None):
+def sql_query_by_doctor_dispensary_children_f1(sql_cond):
     return f"""
 with oms as (select "Врач",
                     "Врач (Профиль МП)",
@@ -131,10 +155,10 @@ with oms as (select "Врач",
                     "Подразделение",
                     split_part("Врач", ' ', 2) || ' ' || left(split_part("Врач", ' ', 3), 1) ||
                     '.' || left(split_part("Врач", ' ', 4), 1) || '.' || ' / ' || "Врач (Профиль МП)" as "ВР/проф_омс"
-             from oms_data
-             where ("Номер счёта" LIKE ANY (:list_months) {sql_cond})
+             from oms.oms_data
+             where "Отчетный период выгрузки" IN ({sql_cond})
                AND "Статус" IN :status_list
-               and "Тип талона" like '%Диспа%'
+               and "Цель" in ('ПН1', 'ДС2')
                and "Подразделение" like '%ДП%'),
      all_combinations as (SELECT "Подразделение",
                                  "ВР/проф_омс",
@@ -164,9 +188,10 @@ ORDER BY all_combinations."Подразделение", "Врач / профил
 """
 
 
-def sql_query_by_doctor_dispensary_children_f2(sql_cond=None):
+def sql_query_by_doctor_dispensary_children_f2(sql_cond):
     return f"""
-with detail as (select detail_dd_data."Пол",
+with detail as (select oms.detail_dd_data."Пол",
+                       "Номер талона",
                        "Тип талона",
                        "Доктор (Код)",
                        "Доктор (ФИО)",
@@ -174,37 +199,46 @@ with detail as (select detail_dd_data."Пол",
                        "Статус-Услуги",
                        "Доктор-Услуги (Код)",
                        "Доктор-Услуги (ФИО)",
-                       doctors_oms_data."Структурное подразделение:" as "Корпус",
-                       doctors_oms_data."Код профиля медпомощи:" as "Профиль"
-                from detail_dd_data
-                         left join doctors_oms_data on detail_dd_data."Доктор (Код)" = doctors_oms_data."Код врача:"
-                where ("Счет" LIKE ANY (:list_months) {sql_cond})
-                  and "Статус" IN :status_list
-                and "Статус-Услуги" = 'Да'
-                and "Тип талона" in ('ПН1', 'ДС2'))
+                       oms.doctors_oms_data."Структурное подразделение:" as "Корпус",
+                       oms.doctors_oms_data."Код профиля медпомощи:" as "Профиль"
+                from oms.detail_dd_data
+                         left join oms.doctors_oms_data on oms.detail_dd_data."Доктор (Код)" = oms.doctors_oms_data."Код врача:"
+                where  "Статус-Услуги" = 'Да'
+                and "Статус" IN :status_list
+                and "Тип талона" in ('ПН1', 'ДС2')),
+    oms as (
+        select "Талон",
+               "Отчетный период выгрузки"
+        from oms.oms_data
+        where "Цель" in ('ПН1', 'ДС2')
+        and "Статус" IN :status_list
+    ),
+    detail_oms as (
+        select *
+        from detail left join oms on "Номер талона" =oms."Талон"
+    )
 
-select "Корпус",
-       "Тип талона" as "Цель",
-       "Название услуги" as "Услуга",
-       sum(case when "Пол" = 'М' then 1 else 0 end)         as "К-во М",
-       sum(case when "Пол" = 'Ж' then 1 else 0 end)         as "К-во Ж",
-       sum(case when "Пол" in ('М', 'Ж') then 1 else 0 end) as "К-во"
-from detail
-group by "Корпус", "Тип талона", "Услуга"
-order by "Корпус",     CASE "Тип талона"
-        WHEN 'ДВ4' THEN 1
-        WHEN 'ДВ2' THEN 2
-        WHEN 'ОПВ' THEN 3
-        WHEN 'УД1' THEN 4
-        WHEN 'УД2' THEN 5
-        ELSE 6
-    END, "Услуга"
+    select "Корпус",
+           "Тип талона" as "Цель",
+           "Название услуги" as "Услуга",
+           sum(case when "Пол" = 'М' then 1 else 0 end)         as "К-во М",
+           sum(case when "Пол" = 'Ж' then 1 else 0 end)         as "К-во Ж",
+           sum(case when "Пол" in ('М', 'Ж') then 1 else 0 end) as "К-во"
+    from detail_oms
+    where "Отчетный период выгрузки" IN ({sql_cond})
+    group by "Корпус", "Тип талона", "Услуга"
+    order by "Корпус",     CASE "Тип талона"
+            WHEN 'ПН1' THEN 1
+            WHEN 'ДС2' THEN 2
+            ELSE 3
+        END, "Услуга"
 """
 
 
-def sql_query_by_doctor_dispensary_children_f3(sql_cond=None):
+def sql_query_by_doctor_dispensary_children_f3(sql_cond):
     return f"""
-with detail as (select detail_dd_data."Пол",
+with detail as (select oms.detail_dd_data."Пол",
+                       "Номер талона",
                        "Тип талона",
                        "Доктор (Код)",
                        "Доктор (ФИО)",
@@ -212,17 +246,27 @@ with detail as (select detail_dd_data."Пол",
                        "Статус-Услуги",
                        "Доктор-Услуги (Код)",
                        "Доктор-Услуги (ФИО)",
-                       doctors_oms_data."Структурное подразделение:" as "Корпус",
-                       CASE 
-                        WHEN doctors_oms_data."Код профиля медпомощи:" LIKE '%136 акушерству и гинекологии (за исключением использования вспомогательных репродуктивных технологий и искусственного прерывания беременности)%'
+                       oms.doctors_oms_data."Структурное подразделение:" as "Корпус",
+                                              CASE
+                        WHEN oms.doctors_oms_data."Код профиля медпомощи:" LIKE '%136 акушерству и гинекологии (за исключением использования вспомогательных репродуктивных технологий и искусственного прерывания беременности)%'
                         THEN 'акушерство и гинекология'
-                        ELSE doctors_oms_data."Код профиля медпомощи:" END as "Профиль"
-                from detail_dd_data
-                         left join doctors_oms_data on detail_dd_data."Доктор-Услуги (Код)" = doctors_oms_data."Код врача:"
-                where ("Счет"LIKE ANY (:list_months) {sql_cond})
-                  and "Статус" IN :status_list
-                and "Статус-Услуги" = 'Да'
-                and "Тип талона" in ('ПН1', 'ДС2'))
+                        ELSE oms.doctors_oms_data."Код профиля медпомощи:" END as "Профиль"
+                from oms.detail_dd_data
+                         left join oms.doctors_oms_data on oms.detail_dd_data."Доктор-Услуги (Код)" = oms.doctors_oms_data."Код врача:"
+                where  "Статус-Услуги" = 'Да'
+                AND "Статус" IN :status_list
+                and "Тип талона" in ('ПН1', 'ДС2')),
+    oms as (
+        select "Талон",
+               "Отчетный период выгрузки"
+        from oms.oms_data
+        where "Цель" in ('ПН1', 'ДС2')
+        AND "Статус" IN :status_list
+    ),
+    detail_oms as (
+        select *
+        from detail left join oms on "Номер талона" =oms."Талон"
+    )
 
 select "Корпус",
        "Тип талона" as "Цель",
@@ -230,17 +274,18 @@ select "Корпус",
        sum(case when "Пол" = 'М' then 1 else 0 end)         as "К-во М",
        sum(case when "Пол" = 'Ж' then 1 else 0 end)         as "К-во Ж",
        sum(case when "Пол" in ('М', 'Ж') then 1 else 0 end) as "К-во"
-from detail
+from detail_oms
+where "Отчетный период выгрузки" IN ({sql_cond})
 group by "Корпус", "Тип талона", "Врач/профиль"
 order by "Корпус", CASE "Тип талона"
-        WHEN 'ПН1' THEN 1
-        WHEN 'ДС2' THEN 2
-        ELSE 3
+            WHEN 'ПН1' THEN 1
+            WHEN 'ДС2' THEN 2
+            ELSE 3
     END, "Врач/профиль"
 """
 
 
-def sql_query_by_doctor_dispensary_reproductive_f1(sql_cond=None):
+def sql_query_by_doctor_dispensary_reproductive_f1(sql_cond):
     return f"""
 with oms as (select "Врач",
                     "Врач (Профиль МП)",
@@ -248,16 +293,12 @@ with oms as (select "Врач",
                     "Пол",
                     "Сумма",
                     "Подразделение",
-        split_part("Врач", ' ', 2) || ' ' || left(split_part("Врач", ' ', 3), 1) || '.' || left(split_part("Врач", ' ', 4), 1) || '.' || ' / ' || 
-        CASE 
-            WHEN "Врач (Профиль МП)" LIKE '%136 акушерству и гинекологии (за исключением использования вспомогательных репродуктивных технологий и искусственного прерывания беременности)%'
-            THEN 'акушерство и гинекология'
-            ELSE "Врач (Профиль МП)"
-        END as "ВР/проф_омс"
-             from oms_data
-             where ("Номер счёта" LIKE ANY (:list_months) {sql_cond})
+                    split_part("Врач", ' ', 2) || ' ' || left(split_part("Врач", ' ', 3), 1) ||
+                    '.' || left(split_part("Врач", ' ', 4), 1) || '.' || ' / ' || "Врач (Профиль МП)" as "ВР/проф_омс"
+             from oms.oms_data
+             where "Отчетный период выгрузки" IN ({sql_cond})
                AND "Статус" IN :status_list
-               and "Цель" IN ('ДР1', 'ДР2')
+               and "Тип талона" like '%Диспа%'
                and "Подразделение" not like '%ДП%'),
      all_combinations as (SELECT "Подразделение",
                                  "ВР/проф_омс",
@@ -267,7 +308,7 @@ with oms as (select "Врач",
 
 
 SELECT all_combinations."Подразделение",
-        all_combinations."ВР/проф_омс" as "Врач / профиль",
+       all_combinations."ВР/проф_омс" as "Врач / профиль",
        all_combinations."Цель",
        sum(case when "Пол" = 'М' then 1 else 0 end)                                     as "К-во М",
        sum(case when "Пол" = 'Ж' then 1 else 0 end)                                     as "К-во Ж",
@@ -287,9 +328,10 @@ ORDER BY all_combinations."Подразделение", "Врач / профил
 """
 
 
-def sql_query_by_doctor_dispensary_reproductive_f2(sql_cond=None):
+def sql_query_by_doctor_dispensary_reproductive_f2(sql_cond):
     return f"""
-with detail as (select detail_dd_data."Пол",
+with detail as (select oms.detail_dd_data."Пол",
+                       "Номер талона",
                        "Тип талона",
                        "Доктор (Код)",
                        "Доктор (ФИО)",
@@ -297,34 +339,46 @@ with detail as (select detail_dd_data."Пол",
                        "Статус-Услуги",
                        "Доктор-Услуги (Код)",
                        "Доктор-Услуги (ФИО)",
-                       doctors_oms_data."Структурное подразделение:" as "Корпус",
-                       doctors_oms_data."Код профиля медпомощи:" as "Профиль"
-                from detail_dd_data
-                         left join doctors_oms_data on detail_dd_data."Доктор (Код)" = doctors_oms_data."Код врача:"
-                where ("Счет" LIKE ANY (:list_months) {sql_cond})
-                  and "Статус" IN :status_list
-                and "Статус-Услуги" = 'Да'
-                and "Тип талона" in ('ДР1', 'ДР2'))
+                       oms.doctors_oms_data."Структурное подразделение:" as "Корпус",
+                       oms.doctors_oms_data."Код профиля медпомощи:" as "Профиль"
+                from oms.detail_dd_data
+                         left join oms.doctors_oms_data on oms.detail_dd_data."Доктор (Код)" = oms.doctors_oms_data."Код врача:"
+                where  "Статус-Услуги" = 'Да'
+                and "Статус" IN :status_list
+                and "Тип талона" in ('ДР1', 'ДР2')),
+    oms as (
+        select "Талон",
+               "Отчетный период выгрузки"
+        from oms.oms_data
+        where "Цель" in ('ДР1', 'ДР2')
+        and "Статус" IN :status_list
+    ),
+    detail_oms as (
+        select *
+        from detail left join oms on "Номер талона" =oms."Талон"
+    )
 
-select "Корпус",
-       "Тип талона" as "Цель",
-       "Название услуги" as "Услуга",
-       sum(case when "Пол" = 'М' then 1 else 0 end)         as "К-во М",
-       sum(case when "Пол" = 'Ж' then 1 else 0 end)         as "К-во Ж",
-       sum(case when "Пол" in ('М', 'Ж') then 1 else 0 end) as "К-во"
-from detail
-group by "Корпус", "Тип талона", "Услуга"
-order by "Корпус",     CASE "Тип талона"
+    select "Корпус",
+           "Тип талона" as "Цель",
+           "Название услуги" as "Услуга",
+           sum(case when "Пол" = 'М' then 1 else 0 end)         as "К-во М",
+           sum(case when "Пол" = 'Ж' then 1 else 0 end)         as "К-во Ж",
+           sum(case when "Пол" in ('М', 'Ж') then 1 else 0 end) as "К-во"
+    from detail_oms
+    where "Отчетный период выгрузки" IN ({sql_cond})
+    group by "Корпус", "Тип талона", "Услуга"
+    order by "Корпус",     CASE "Тип талона"
         WHEN 'ДР1' THEN 1
-        WHEN 'ДР2' THEN 2
+        WHEN 'ДЗ2' THEN 2
         ELSE 3
-    END, "Услуга"
+        END, "Услуга"
 """
 
 
-def sql_query_by_doctor_dispensary_reproductive_f3(sql_cond=None):
+def sql_query_by_doctor_dispensary_reproductive_f3(sql_cond):
     return f"""
-with detail as (select detail_dd_data."Пол",
+with detail as (select oms.detail_dd_data."Пол",
+                       "Номер талона",
                        "Тип талона",
                        "Доктор (Код)",
                        "Доктор (ФИО)",
@@ -332,18 +386,27 @@ with detail as (select detail_dd_data."Пол",
                        "Статус-Услуги",
                        "Доктор-Услуги (Код)",
                        "Доктор-Услуги (ФИО)",
-                       doctors_oms_data."Структурное подразделение:" as "Корпус",
-                       CASE 
-                        WHEN doctors_oms_data."Код профиля медпомощи:" LIKE '%136 акушерству и гинекологии (за исключением использования вспомогательных репродуктивных технологий и искусственного прерывания беременности)%'
+                       oms.doctors_oms_data."Структурное подразделение:" as "Корпус",
+                                              CASE
+                        WHEN oms.doctors_oms_data."Код профиля медпомощи:" LIKE '%136 акушерству и гинекологии (за исключением использования вспомогательных репродуктивных технологий и искусственного прерывания беременности)%'
                         THEN 'акушерство и гинекология'
-                        ELSE doctors_oms_data."Код профиля медпомощи:" END as "Профиль"
-                       
-                from detail_dd_data
-                         left join doctors_oms_data on detail_dd_data."Доктор-Услуги (Код)" = doctors_oms_data."Код врача:"
-                where ("Счет"LIKE ANY (:list_months) {sql_cond})
-                  and "Статус" IN :status_list
-                and "Статус-Услуги" = 'Да'
-                and "Тип талона" in ('ДР1', 'ДР2'))
+                        ELSE oms.doctors_oms_data."Код профиля медпомощи:" END as "Профиль"
+                from oms.detail_dd_data
+                         left join oms.doctors_oms_data on oms.detail_dd_data."Доктор-Услуги (Код)" = oms.doctors_oms_data."Код врача:"
+                where  "Статус-Услуги" = 'Да'
+                AND "Статус" IN :status_list
+                and "Тип талона" in ('ДР1', 'ДР2')),
+    oms as (
+        select "Талон",
+               "Отчетный период выгрузки"
+        from oms.oms_data
+        where "Цель" in ('ДР1', 'ДР2')
+        AND "Статус" IN :status_list
+    ),
+    detail_oms as (
+        select *
+        from detail left join oms on "Номер талона" =oms."Талон"
+    )
 
 select "Корпус",
        "Тип талона" as "Цель",
@@ -351,7 +414,8 @@ select "Корпус",
        sum(case when "Пол" = 'М' then 1 else 0 end)         as "К-во М",
        sum(case when "Пол" = 'Ж' then 1 else 0 end)         as "К-во Ж",
        sum(case when "Пол" in ('М', 'Ж') then 1 else 0 end) as "К-во"
-from detail
+from detail_oms
+where "Отчетный период выгрузки" IN ({sql_cond})
 group by "Корпус", "Тип талона", "Врач/профиль"
 order by "Корпус", CASE "Тип талона"
         WHEN 'ДР1' THEN 1
