@@ -21,6 +21,7 @@ from services.MosaicMed.pages.economic_reports.sv_pod.sv_pod import tab_layout_s
 from services.MosaicMed.pages.economic_reports.volumes_indicators.volumes_indicators import app_pgg_amb
 from services.MosaicMed.pages.eln.tab import app_tabs_eln
 from services.MosaicMed.pages.filling_lists.tab import app_tabs_fil_list
+from services.MosaicMed.pages.iszl.disp_nabl.tab import app_tabs_iszl_disp_nab
 from services.MosaicMed.pages.it_department.cel_3.tab import app_tabs_cel3
 from services.MosaicMed.pages.it_department.for_smo.for_smo import tab_layout_for_smo
 from services.MosaicMed.pages.it_department.generation_invoices.generation_invoices import tab_layout_other_gen_invoices
@@ -52,7 +53,7 @@ routes = {
     "/admin/users": users_layout,
     "/admin/roles": roles_layout(),
     "/admin/settings": settings_layout,
-    "/iszl/disp-nab": html.H2("исзл1"),
+    "/iszl/disp-nab": app_tabs_iszl_disp_nab,
     "/iszl/people": html.H2("исзл2"),
     "/dispensary-observation/adult": html.H2("Взрослые"),
     "/dispensary-observation/children": html.H2("Дети"),

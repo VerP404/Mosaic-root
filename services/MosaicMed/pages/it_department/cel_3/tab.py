@@ -1,6 +1,5 @@
 from dash import html, dcc, Output, Input
 import dash_bootstrap_components as dbc
-from database.db_conn import engine
 from services.MosaicMed.app import app
 from services.MosaicMed.pages.it_department.cel_3.tab1 import tab1_layout_cel_3
 
