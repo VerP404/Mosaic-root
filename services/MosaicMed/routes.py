@@ -18,6 +18,7 @@ from services.MosaicMed.pages.economic_reports.route_children_dd.route_children_
 from services.MosaicMed.pages.economic_reports.stationary.tab import stationary
 from services.MosaicMed.pages.economic_reports.sv_pod.sv_pod import tab_layout_sv_pod
 from services.MosaicMed.pages.economic_reports.volumes_indicators.volumes_indicators import app_pgg_amb
+from services.MosaicMed.pages.it_department.cel_3.tab import app_tabs_cel3
 from services.MosaicMed.pages.it_department.update_database.update_database import tab_layout_it_update_bd
 
 # Проверка доступа для специфичных маршрутов
@@ -41,7 +42,7 @@ routes = {
     "/it/update-bd": tab_layout_it_update_bd,
     "/it/stat-months": html.H2("it3"),
     "/it/for-smo": html.H2("it4"),
-    "/it/cel3": html.H2("it5"),
+    "/it/cel3": app_tabs_cel3,
     "/admin/users": users_layout,
     "/admin/roles": roles_layout(),
     "/admin/settings": settings_layout,

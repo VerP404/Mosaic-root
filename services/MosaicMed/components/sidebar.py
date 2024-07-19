@@ -74,11 +74,10 @@ def get_sidebar():
             nav_items.append(dbc.DropdownMenu(
                 [
                     dbc.DropdownMenuItem("Взрослые", href="/dispensary-observation/adult"),
-                    dbc.DropdownMenuItem("Дети", href="/dispensary-observation/children"),
                     dbc.DropdownMenuItem("ИСЗЛ", href="/dispensary-observation/iszl"),
                 ],
                 label=[html.I(className="fas fa-notes-medical"),
-                       html.Span(" Диспансерный учет", className="nav-text", title="Диспансерный учет")],
+                       html.Span(" Диспансерное наблюдение", className="nav-text", title="Диспансерный учет")],
                 nav=True,
                 id="nav-dispensary",
                 right=True,

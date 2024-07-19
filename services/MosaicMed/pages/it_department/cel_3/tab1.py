@@ -1,9 +1,10 @@
 from dash import html, Input, Output, dash_table, dcc
-from app import app, engine
+from database.db_conn import engine
+from services.MosaicMed.app import app
 import dash_bootstrap_components as dbc
 
-from callback import TableUpdater
-from pages.it_department.cel_3.query import sql_query_list_patients, sql_query_list_patients_svod
+from services.MosaicMed.callback.callback import TableUpdater
+from services.MosaicMed.pages.it_department.cel_3.query import sql_query_list_patients, sql_query_list_patients_svod
 
 # Отчет для сборки талонов
 type_page = "tab1_cel_3"

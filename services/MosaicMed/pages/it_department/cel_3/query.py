@@ -14,7 +14,7 @@ select "К-во ЕНП" as "К-во талонов",
 from (
 SELECT COUNT("Полис") OVER (PARTITION BY "Полис") AS "К-во ЕНП",
        *
-    FROM oms_data
+    FROM oms.oms_data
     WHERE "Цель" = '3'
     and "Диагноз основной (DS1)" like 'I%'
     and "Статус" in ('1', '2', '3', '6', '8')) as oms
@@ -39,7 +39,7 @@ with dat as (select "К-во ЕНП" as "К-во талонов",
 from (
 SELECT COUNT("Полис") OVER (PARTITION BY "Полис") AS "К-во ЕНП",
        *
-    FROM oms_data
+    FROM oms.oms_data
     WHERE "Цель" = '3'
     and "Диагноз основной (DS1)" like 'I%'
     and "Статус" in ('1', '2', '3', '6', '8')) as oms
