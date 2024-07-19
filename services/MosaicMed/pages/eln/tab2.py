@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 from dash import html, dcc, Output, Input, dash_table
-from app import app, engine
-from callback import TableUpdater
-from pages.eln.query import sql_query_eln_zapis, sql_query_eln_zapis_list, sql_query_eln_zapis_svod
+from database.db_conn import engine
+from services.MosaicMed.app import app
+from services.MosaicMed.callback.callback import TableUpdater
+from services.MosaicMed.pages.eln.query import sql_query_eln_zapis, sql_query_eln_zapis_list, sql_query_eln_zapis_svod
 
 type_page = "eln-tab2"
 

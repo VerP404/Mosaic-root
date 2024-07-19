@@ -7,12 +7,12 @@ obr as (select concat("Фамилия", ' ', "Имя", ' ', "Отчество", 
                    when "Дата приема" is not null then TO_DATE("Дата приема"::text, 'YYYY-MM-DD"T"HH24:MI')::date
                    else TO_DATE("Дата записи"::text, 'YYYY-MM-DD"T"HH24:MI')::date end as "Прием",
                *
-        from obr_doc),
+        from kvazar.obrdoc_data),
 --     "ЭЛН" - фильтруем: первичные, не по уходу, действующие, за нужный период
 eln as (select concat("Фамилия пациента", ' ', "Имя пациента", ' ', "Отчество пациента", ' ',
                       "Дата рождения") AS "ФИО_ДР_элн",
                *
-        from ln_data
+        from kvazar.ln_data
         where "Первичный" = 'да'
           and "Статус" not in ('Действия прекращены', 'Отклонен председателем ВК')
           and "Уход за больными" is null
@@ -75,12 +75,12 @@ obr as (select concat("Фамилия", ' ', "Имя", ' ', "Отчество", 
                    when "Дата приема" is not null then TO_DATE("Дата приема"::text, 'YYYY-MM-DD"T"HH24:MI')::date
                    else TO_DATE("Дата записи"::text, 'YYYY-MM-DD"T"HH24:MI')::date end as "Прием",
                *
-        from obr_doc),
+        from kvazar.obrdoc_data),
 --     "ЭЛН" - фильтруем: первичные, не по уходу, действующие, за нужный период
 eln as (select concat("Фамилия пациента", ' ', "Имя пациента", ' ', "Отчество пациента", ' ',
                       "Дата рождения") AS "ФИО_ДР_элн",
                *
-        from ln_data
+        from kvazar.ln_data
         where "Первичный" = 'да'
           and "Статус" not in ('Действия прекращены', 'Отклонен председателем ВК')
           and "Уход за больными" is null
@@ -110,13 +110,13 @@ obr as (select concat("Фамилия", ' ', "Имя", ' ', "Отчество", 
                    when "Дата приема" is not null then TO_DATE("Дата приема"::text, 'YYYY-MM-DD"T"HH24:MI')::date
                    else TO_DATE("Дата записи"::text, 'YYYY-MM-DD"T"HH24:MI')::date end as "Прием",
                *
-        from obr_doc),
+        from kvazar.obrdoc_data),
 odr_fil as (select *
             from obr
             where "Прием" >= to_date(:date_in, 'DD-MM-YYYY')),
 eln as (select concat("Фамилия пациента", ' ', "Имя пациента", ' ', "Отчество пациента", ' ',
                       "Дата рождения") as "ФИО_ЛН", *
-        from ln_data
+        from kvazar.ln_data
         where to_date("Дата выдачи", 'YYYY-MM-DD') BETWEEN DATE_TRUNC('DAY', :date_in ::date - INTERVAL '14 days')::date and DATE_TRUNC('DAY', :date_in ::date + INTERVAL '14 days')::date
           and "Статус" in ('Открыт', 'Продлен')
           and "Уход за больными" is null),
@@ -141,13 +141,13 @@ obr as (select concat("Фамилия", ' ', "Имя", ' ', "Отчество", 
                    when "Дата приема" is not null then TO_DATE("Дата приема"::text, 'YYYY-MM-DD"T"HH24:MI')::date
                    else TO_DATE("Дата записи"::text, 'YYYY-MM-DD"T"HH24:MI')::date end as "Прием",
                *
-        from obr_doc),
+        from kvazar.obrdoc_data),
 odr_fil as (select *
             from obr
             where "Прием" >= to_date(:date_in, 'DD-MM-YYYY')),
 eln as (select concat("Фамилия пациента", ' ', "Имя пациента", ' ', "Отчество пациента", ' ',
                       "Дата рождения") as "ФИО_ЛН", *
-        from ln_data
+        from kvazar.ln_data
         where to_date("Дата выдачи", 'YYYY-MM-DD') BETWEEN DATE_TRUNC('DAY', :date_in ::date - INTERVAL '14 days')::date and DATE_TRUNC('DAY', :date_in ::date + INTERVAL '14 days')::date
           and "Статус" in ('Открыт', 'Продлен')
           and "Уход за больными" is null),
@@ -184,13 +184,13 @@ obr as (select concat("Фамилия", ' ', "Имя", ' ', "Отчество", 
                    when "Дата приема" is not null then TO_DATE("Дата приема"::text, 'YYYY-MM-DD"T"HH24:MI')::date
                    else TO_DATE("Дата записи"::text, 'YYYY-MM-DD"T"HH24:MI')::date end as "Прием",
                *
-        from obr_doc),
+        from kvazar.obrdoc_data),
 odr_fil as (select *
             from obr
             where "Прием" >= to_date(:date_in, 'DD-MM-YYYY')),
 eln as (select concat("Фамилия пациента", ' ', "Имя пациента", ' ', "Отчество пациента", ' ',
                       "Дата рождения") as "ФИО_ЛН", *
-        from ln_data
+        from kvazar.ln_data
         where to_date("Дата выдачи", 'YYYY-MM-DD') BETWEEN DATE_TRUNC('DAY', :date_in ::date - INTERVAL '14 days')::date and DATE_TRUNC('DAY', :date_in ::date + INTERVAL '14 days')::date
           and "Статус" in ('Открыт', 'Продлен')
           and "Уход за больными" is null),

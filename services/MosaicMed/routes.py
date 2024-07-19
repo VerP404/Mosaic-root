@@ -19,6 +19,7 @@ from services.MosaicMed.pages.economic_reports.route_children_dd.route_children_
 from services.MosaicMed.pages.economic_reports.stationary.tab import stationary
 from services.MosaicMed.pages.economic_reports.sv_pod.sv_pod import tab_layout_sv_pod
 from services.MosaicMed.pages.economic_reports.volumes_indicators.volumes_indicators import app_pgg_amb
+from services.MosaicMed.pages.eln.tab import app_tabs_eln
 from services.MosaicMed.pages.filling_lists.tab import app_tabs_fil_list
 from services.MosaicMed.pages.it_department.cel_3.tab import app_tabs_cel3
 from services.MosaicMed.pages.it_department.for_smo.for_smo import tab_layout_for_smo
@@ -57,7 +58,7 @@ routes = {
     "/dispensary-observation/children": html.H2("Дети"),
     "/dispensary-observation/iszl": html.H2("ИСЗЛ"),
     "/other-reports": html.H2("Другие"),
-    "/eln": html.H2("ЭЛН"),
+    "/eln": app_tabs_eln,
     "/volumes/target": html.H2("Талоны"),
     "/volumes/finance": html.H2("Финансы"),
     "/filling-lists": app_tabs_fil_list,
