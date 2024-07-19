@@ -1,8 +1,8 @@
 import pandas as pd
 from sqlalchemy import text
+from database.db_conn import engine
 import dash_bootstrap_components as dbc
-from app import engine, app
-from dash import html, dash_table, dcc, Output, Input, exceptions, callback_context
+from dash import html, dash_table, dcc
 
 
 # Получаем список диагнозов приказа 168н
@@ -18,11 +18,11 @@ def list_for_check(eng):
             "ENP" as "ЕНП_",
             "SMO" as "СМО",
             "LPUUCH" as "Временный участок"
-            from people_data
+            from iszl.people_data
             where "LPUUCH" in ('111_360025', '111_360026')
             order by "ФИО"),
                 pep as (select *
-                        from nas left join naselenie on nas."ЕНП_" = naselenie."ЕНП")
+                        from nas left join info.naselenie_data on nas."ЕНП_" = info.naselenie_data."ЕНП")
             
             select "ФИО",
                    "ДР",

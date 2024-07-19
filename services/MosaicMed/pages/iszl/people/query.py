@@ -1,10 +1,10 @@
 sql_query_people_iszl = """
-with nas as (select people_data."FIO",
-                    people_data."DR",
-                    people_data."ENP",
-                    people_data."LPUUCH",
-                    area_data."Корпус",
-                    area_data."Врач",
+with nas as (select iszl.people_data."FIO",
+                    iszl.people_data."DR",
+                    iszl.people_data."ENP",
+                    iszl.people_data."LPUUCH",
+                    info.area_data."Корпус",
+                    info.area_data."Врач",
                     2024 - CAST(substring("DR" FROM LENGTH("DR") - 3) AS integer) as "Возраст",
                     case
                         when "FIO" like any
@@ -13,8 +13,8 @@ with nas as (select people_data."FIO",
                         when "FIO" like any (array ['%ИЧ','%ич', '%ГЛЫ', '%глы']) then 'м'
                         else 'м' end                         as "пол"
 
-             from people_data
-                      left join area_data on people_data."LPUUCH" = area_data."Участок"),
+             from iszl.people_data
+                      left join info.area_data on iszl.people_data."LPUUCH" = info.area_data."Участок"),
 
      nas_gr as (select *,
                        case
@@ -82,12 +82,12 @@ order by "LPUUCH"
 """
 
 sql_query_people_iszl_all = """
-with nas as (select people_data."FIO",
-                    people_data."DR",
-                    people_data."ENP",
-                    people_data."LPUUCH",
-                    area_data."Корпус",
-                    area_data."Врач",
+with nas as (select iszl.people_data."FIO",
+                    iszl.people_data."DR",
+                    iszl.people_data."ENP",
+                    iszl.people_data."LPUUCH",
+                    info.area_data."Корпус",
+                    info.area_data."Врач",
                     EXTRACT(YEAR FROM CURRENT_DATE) - CAST(substring("DR" FROM LENGTH("DR") - 3) AS integer) as "Возраст",
                     case
                         when "FIO" like any
@@ -96,8 +96,8 @@ with nas as (select people_data."FIO",
                         when "FIO" like any (array ['%ИЧ','%ич', '%ГЛЫ', '%глы']) then 'м'
                         else 'м' end                         as "пол"
 
-             from people_data
-                      left join area_data on people_data."LPUUCH" = area_data."Участок"),
+             from iszl.people_data
+                      left join info.area_data on iszl.people_data."LPUUCH" = info.area_data."Участок"),
      nas_gr as (select *,
                        case
                            when "Возраст" < 18 then '0-17'
@@ -161,12 +161,12 @@ order by "Корпус"
 """
 
 sql_query_people_iszl_168n = """
-with nas as (select people_data."FIO",
-                    people_data."DR",
-                    people_data."ENP",
-                    people_data."LPUUCH",
-                    area_data."Корпус",
-                    area_data."Врач",
+with nas as (select iszl.people_data."FIO",
+                    iszl.people_data."DR",
+                    iszl.people_data."ENP",
+                    iszl.people_data."LPUUCH",
+                    info.area_data."Корпус",
+                    info.area_data."Врач",
                     2024 - CAST(substring("DR" FROM LENGTH("DR") - 3) AS integer) as "Возраст",
                     case
                         when "FIO" like any
@@ -175,8 +175,8 @@ with nas as (select people_data."FIO",
                         when "FIO" like any (array ['%ИЧ','%ич', '%ГЛЫ', '%глы']) then 'м'
                         else 'м' end                         as "пол"
 
-             from people_data
-                      left join area_data on people_data."LPUUCH" = area_data."Участок"),
+             from iszl.people_data
+                      left join info.area_data on iszl.people_data."LPUUCH" = info.area_data."Участок"),
 
      nas_gr as (select *,
                        case
@@ -206,9 +206,9 @@ with nas as (select people_data."FIO",
                          sum(case when пол = 'м' and "Группа" = '61+' then 1 else 0 end)   as "61+ м"
                   from nas_gr
                   where nas_gr."ENP" in (select distinct "ENP"
-                     from iszl_data
-                              left join (select distinct "Код МКБ" from "168n_data") as dia_pr168
-                                        on iszl_data."DS" = dia_pr168."Код МКБ"
+                     from iszl.iszl_data
+                              left join (select distinct "Код МКБ" from info.dn168n_data) as dia_pr168
+                                        on iszl.iszl_data."DS" = dia_pr168."Код МКБ"
                      where "Код МКБ" is not null)
                   group by "Корпус", "LPUUCH")
 
@@ -247,20 +247,20 @@ from nas_gr
 
 where "Корпус" = :korp
 and nas_gr."ENP" in (select distinct "ENP"
-     from iszl_data
-              left join (select distinct "Код МКБ" from "168n_data") as dia_pr168
-                        on iszl_data."DS" = dia_pr168."Код МКБ"
+     from iszl.iszl_data
+              left join (select distinct "Код МКБ" from info.dn168n_data) as dia_pr168
+                        on iszl.iszl_data."DS" = dia_pr168."Код МКБ"
      where "Код МКБ" is not null)
 order by "LPUUCH"
 """
 
 sql_query_people_iszl_all_168n = """
-with nas as (select people_data."FIO",
-                    people_data."DR",
-                    people_data."ENP",
-                    people_data."LPUUCH",
-                    area_data."Корпус",
-                    area_data."Врач",
+with nas as (select iszl.people_data."FIO",
+                    iszl.people_data."DR",
+                    iszl.people_data."ENP",
+                    iszl.people_data."LPUUCH",
+                    info.area_data."Корпус",
+                    info.area_data."Врач",
                     EXTRACT(YEAR FROM CURRENT_DATE) - CAST(substring("DR" FROM LENGTH("DR") - 3) AS integer) as "Возраст",
                     case
                         when "FIO" like any
@@ -269,8 +269,8 @@ with nas as (select people_data."FIO",
                         when "FIO" like any (array ['%ИЧ','%ич', '%ГЛЫ', '%глы']) then 'м'
                         else 'м' end                         as "пол"
 
-             from people_data
-                      left join area_data on people_data."LPUUCH" = area_data."Участок"),
+             from iszl.people_data
+                      left join info.area_data on iszl.people_data."LPUUCH" = info.area_data."Участок"),
      nas_gr as (select *,
                        case
                            when "Возраст" < 18 then '0-17'
@@ -298,9 +298,9 @@ with nas as (select people_data."FIO",
                          count(*)                                                          as "Всего"
                   from nas_gr
                   where nas_gr."ENP" in (select distinct "ENP"
-                     from iszl_data
-                              left join (select distinct "Код МКБ" from "168n_data") as dia_pr168
-                                        on iszl_data."DS" = dia_pr168."Код МКБ"
+                     from iszl.iszl_data
+                              left join (select distinct "Код МКБ" from info.dn168n_data) as dia_pr168
+                                        on iszl.iszl_data."DS" = dia_pr168."Код МКБ"
                      where "Код МКБ" is not null)
                   group by "Корпус")
 
@@ -336,20 +336,20 @@ select ' Итого',
        sum(case when пол = 'м' and "Группа" = '61+' then 1 else 0 end)   as "61+ м"
 from nas_gr
 where nas_gr."ENP" in (select distinct "ENP"
-     from iszl_data
-              left join (select distinct "Код МКБ" from "168n_data") as dia_pr168
-                        on iszl_data."DS" = dia_pr168."Код МКБ"
+     from iszl.iszl_data
+              left join (select distinct "Код МКБ" from info.dn168n_data) as dia_pr168
+                        on iszl.iszl_data."DS" = dia_pr168."Код МКБ"
      where "Код МКБ" is not null)
 order by "Корпус"
 """
 
 sql_query_people_iszl_168n_oms = """
-with nas as (select people_data."FIO",
-                    people_data."DR",
-                    people_data."ENP",
-                    people_data."LPUUCH",
-                    area_data."Корпус",
-                    area_data."Врач",
+with nas as (select iszl.people_data."FIO",
+                    iszl.people_data."DR",
+                    iszl.people_data."ENP",
+                    iszl.people_data."LPUUCH",
+                    info.area_data."Корпус",
+                    info.area_data."Врач",
                     2024 - CAST(substring("DR" FROM LENGTH("DR") - 3) AS integer) as "Возраст",
                     case
                         when "FIO" like any
@@ -358,8 +358,8 @@ with nas as (select people_data."FIO",
                         when "FIO" like any (array ['%ИЧ','%ич', '%ГЛЫ', '%глы']) then 'м'
                         else 'м' end                         as "пол"
 
-             from people_data
-                      left join area_data on people_data."LPUUCH" = area_data."Участок"),
+             from iszl.people_data
+                      left join info.area_data on iszl.people_data."LPUUCH" = info.area_data."Участок"),
 
      nas_gr as (select *,
                        case
@@ -389,12 +389,12 @@ with nas as (select people_data."FIO",
                          sum(case when пол = 'м' and "Группа" = '61+' then 1 else 0 end)   as "61+ м"
                   from nas_gr
                   where nas_gr."ENP" in (select distinct "ENP"
-                     from iszl_data
-                              left join (select distinct "Код МКБ" from "168n_data") as dia_pr168
-                                        on iszl_data."DS" = dia_pr168."Код МКБ"
+                     from iszl.iszl_data
+                              left join (select distinct "Код МКБ" from info.dn168n_data) as dia_pr168
+                                        on iszl.iszl_data."DS" = dia_pr168."Код МКБ"
                      where "Код МКБ" is not null)
                      and nas_gr."ENP" in (select distinct "ЕНП"
-                       from oms_data
+                       from oms.oms_data
                        where "Цель" = '3'
                          and "Статус" in ('1', '2', '3', '6', '8'))
                   group by "Корпус", "LPUUCH")
@@ -434,24 +434,24 @@ from nas_gr
 
 where "Корпус" = :korp
 and nas_gr."ENP" in (select distinct "ENP"
-     from iszl_data
-              left join (select distinct "Код МКБ" from "168n_data") as dia_pr168
-                        on iszl_data."DS" = dia_pr168."Код МКБ"
+     from iszl.iszl_data
+              left join (select distinct "Код МКБ" from info.dn168n_data) as dia_pr168
+                        on iszl.iszl_data."DS" = dia_pr168."Код МКБ"
      where "Код МКБ" is not null)
      and nas_gr."ENP" in (select distinct "ЕНП"
-                       from oms_data
+                       from oms.oms_data
                        where "Цель" = '3'
                          and "Статус" in ('1', '2', '3', '6', '8'))
 order by "LPUUCH"
 """
 
 sql_query_people_iszl_all_168n_oms = """
-with nas as (select people_data."FIO",
-                    people_data."DR",
-                    people_data."ENP",
-                    people_data."LPUUCH",
-                    area_data."Корпус",
-                    area_data."Врач",
+with nas as (select iszl.people_data."FIO",
+                    iszl.people_data."DR",
+                    iszl.people_data."ENP",
+                    iszl.people_data."LPUUCH",
+                    info.area_data."Корпус",
+                    info.area_data."Врач",
                     EXTRACT(YEAR FROM CURRENT_DATE) -
                     CAST(substring("DR" FROM LENGTH("DR") - 3) AS integer) as "Возраст",
                     case
@@ -461,8 +461,8 @@ with nas as (select people_data."FIO",
                         when "FIO" like any (array ['%ИЧ','%ич', '%ГЛЫ', '%глы']) then 'м'
                         else 'м' end                                       as "пол"
 
-             from people_data
-                      left join area_data on people_data."LPUUCH" = area_data."Участок"),
+             from iszl.people_data
+                      left join info.area_data on iszl.people_data."LPUUCH" = info.area_data."Участок"),
      nas_gr as (select *,
                        case
                            when "Возраст" < 18 then '0-17'
@@ -493,12 +493,12 @@ with nas as (select people_data."FIO",
                          count(*)                                                          as "Всего"
                   from nas_gr
                   where nas_gr."ENP" in (select distinct "ENP"
-                                         from iszl_data
-                                                  left join (select distinct "Код МКБ" from "168n_data") as dia_pr168
-                                                            on iszl_data."DS" = dia_pr168."Код МКБ"
+                                         from iszl.iszl_data
+                                                  left join (select distinct "Код МКБ" from info.dn168n_data) as dia_pr168
+                                                            on iszl.iszl_data."DS" = dia_pr168."Код МКБ"
                                          where "Код МКБ" is not null)
                     and nas_gr."ENP" in (select distinct "ЕНП"
-                                         from oms_data
+                                         from oms.oms_data
                                          where "Цель" = '3'
                                            and "Статус" in ('1', '2', '3', '6', '8'))
                   group by "Корпус")
@@ -539,12 +539,12 @@ select ' Итого',
        sum(case when пол = 'м' and "Группа" = '61+' then 1 else 0 end)   as "61+ м"
 from nas_gr
 where nas_gr."ENP" in (select distinct "ENP"
-                       from iszl_data
-                                left join (select distinct "Код МКБ" from "168n_data") as dia_pr168
-                                          on iszl_data."DS" = dia_pr168."Код МКБ"
+                       from iszl.iszl_data
+                                left join (select distinct "Код МКБ" from info.dn168n_data) as dia_pr168
+                                          on iszl.iszl_data."DS" = dia_pr168."Код МКБ"
                        where "Код МКБ" is not null)
   and nas_gr."ENP" in (select distinct "ЕНП"
-                       from oms_data
+                       from oms.oms_data
                        where "Цель" = '3'
                          and "Статус" in ('1', '2', '3', '6', '8'))
 order by "Корпус"

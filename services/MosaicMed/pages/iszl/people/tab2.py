@@ -1,7 +1,8 @@
 import pandas as pd
 from sqlalchemy import text
+from database.db_conn import engine
+from services.MosaicMed.app import app
 import dash_bootstrap_components as dbc
-from app import engine, app
 from dash import html, dash_table, dcc, Output, Input, exceptions, callback_context
 
 
@@ -9,10 +10,10 @@ from dash import html, dash_table, dcc, Output, Input, exceptions, callback_cont
 def list_for_iszl(eng):
     with eng.connect() as conn:
         sql_query = """
-            with people_uch_is_null as (select people_data.*,
+            with people_uch_is_null as (select iszl.people_data.*,
                                                EXTRACT(YEAR FROM CURRENT_DATE) - CAST(substring("DR" FROM LENGTH("DR") - 3) AS integer) as "Возраст"
-                                        from people_data
-                                                 left join area_data on people_data."LPUUCH" = area_data."Участок"
+                                        from iszl.people_data
+                                                 left join info.area_data on iszl.people_data."LPUUCH" = area_data."Участок"
                                         where "Корпус" is null)
             select "PID",
                    "FIO",
