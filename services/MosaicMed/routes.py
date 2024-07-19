@@ -28,6 +28,7 @@ from services.MosaicMed.pages.it_department.for_smo.for_smo import tab_layout_fo
 from services.MosaicMed.pages.it_department.generation_invoices.generation_invoices import tab_layout_other_gen_invoices
 from services.MosaicMed.pages.it_department.status_months.status_months import tab_layout_other_stat_months
 from services.MosaicMed.pages.it_department.update_database.update_database import tab_layout_it_update_bd
+from services.MosaicMed.pages.other_reports.tab import app_tabs_other_reports
 
 # Проверка доступа для специфичных маршрутов
 routes = {
@@ -59,7 +60,7 @@ routes = {
     "/dispensary-observation/adult": html.H2("Взрослые"),
     "/dispensary-observation/children": html.H2("Дети"),
     "/dispensary-observation/iszl": app_tabs_iszl_disp_nab,
-    "/other-reports": html.H2("Другие"),
+    "/other-reports": app_tabs_other_reports,
     "/eln": app_tabs_eln,
     "/volumes/target": html.H2("Талоны"),
     "/volumes/finance": html.H2("Финансы"),
