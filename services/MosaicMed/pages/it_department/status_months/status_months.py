@@ -1,10 +1,11 @@
 import pandas as pd
 from dash import html, Input, Output, dash_table, dcc, State
-from app import app, engine
+from database.db_conn import engine
+from services.MosaicMed.app import app
 import dash_bootstrap_components as dbc
 
-from callback import TableUpdater
-from pages.it_department.status_months.query import sql_query_stat_month
+from services.MosaicMed.callback.callback import TableUpdater
+from services.MosaicMed.pages.it_department.status_months.query import sql_query_stat_month
 
 type_page = "stat-months"
 

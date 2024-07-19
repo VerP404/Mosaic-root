@@ -20,6 +20,7 @@ from services.MosaicMed.pages.economic_reports.sv_pod.sv_pod import tab_layout_s
 from services.MosaicMed.pages.economic_reports.volumes_indicators.volumes_indicators import app_pgg_amb
 from services.MosaicMed.pages.it_department.cel_3.tab import app_tabs_cel3
 from services.MosaicMed.pages.it_department.generation_invoices.generation_invoices import tab_layout_other_gen_invoices
+from services.MosaicMed.pages.it_department.status_months.status_months import tab_layout_other_stat_months
 from services.MosaicMed.pages.it_department.update_database.update_database import tab_layout_it_update_bd
 
 # Проверка доступа для специфичных маршрутов
@@ -41,7 +42,7 @@ routes = {
     "/econ/stationary": stationary,
     "/it/gen-invoices": tab_layout_other_gen_invoices,
     "/it/update-bd": tab_layout_it_update_bd,
-    "/it/stat-months": html.H2("it3"),
+    "/it/stat-months": tab_layout_other_stat_months,
     "/it/for-smo": html.H2("it4"),
     "/it/cel3": app_tabs_cel3,
     "/admin/users": users_layout,
