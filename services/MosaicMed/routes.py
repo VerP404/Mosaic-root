@@ -9,6 +9,7 @@ from services.MosaicMed.pages.dispensary.reproductive.tab import app_tabs_reprod
 from services.MosaicMed.pages.doctors_talon.doctor.tab import app_tabs_doctors
 from services.MosaicMed.pages.doctors_talon.doctors_list.tab import app_tabs_doctors_list
 from services.MosaicMed.pages.economic_reports.by_doctors.tab import app_tabs_by_doctor
+from services.MosaicMed.pages.economic_reports.by_doctors_cel.tab import app_tabs_by_doctor_cel
 from services.MosaicMed.pages.economic_reports.by_doctors_dispensary.tab import app_tabs_by_doctor_dispensary
 from services.MosaicMed.pages.economic_reports.reports.tab import app_tabs_econ_reports
 from services.MosaicMed.pages.economic_reports.sv_pod.sv_pod import tab_layout_sv_pod
@@ -26,7 +27,7 @@ routes = {
     "/econ/report": app_tabs_econ_reports,
     "/econ/pgg": app_pgg_amb,
     "/econ/by-doctor": app_tabs_by_doctor,
-    "/econ/by-doctor-cel": html.H2("Экономические отчеты5"),
+    "/econ/by-doctor-cel": app_tabs_by_doctor_cel,
     "/econ/by-doctor-dispensary": app_tabs_by_doctor_dispensary,
     "/econ/new-territories": html.H2("Экономические отчеты7"),
     "/econ/route-children": html.H2("Экономические отчеты8"),

@@ -1,4 +1,5 @@
-sql_query_by_doctors_mest = f"""
+def sql_query_by_doctors_mest(sql_cond):
+    return f"""
 select distinct "Корпус Врач"                                                                  as "ФИО Врача",
                 "Подразделение"                                                                as "Корпус",
                 CASE
@@ -29,15 +30,16 @@ select distinct "Корпус Врач"                                         
                 SUM(CASE WHEN "Цель" = '640' THEN 1 ELSE 0 END)                AS "640"
 from (SELECT *, split_part("Врач", ' ', 2) || ' ' || left(split_part("Врач", ' ', 3), 1) ||
              '.' || left(split_part("Врач", ' ', 4), 1) || '.' AS "Корпус Врач"
-      FROM oms_data) as oms
-WHERE ("Номер счёта" LIKE ANY (:list_months))
-  AND "Статус" = '3'
-    and "Номер счёта" not like '%I%'
+      FROM oms.oms_data) as oms
+WHERE "Отчетный период выгрузки" IN ({sql_cond})
+  AND "Статус" IN :status_list
+    and "Код СМО" like '360%'
 group by "ФИО Врача", "Корпус", "Профиль"
 order by "Корпус","Профиль", "ФИО Врача"
     """
 
-sql_query_by_doctors_inog = f"""
+def sql_query_by_doctors_inog(sql_cond):
+    return f"""
 select distinct "Корпус Врач"                                                                  as "ФИО Врача",
                 "Подразделение"                                                                as "Корпус",
                 CASE
@@ -68,15 +70,16 @@ select distinct "Корпус Врач"                                         
                 SUM(CASE WHEN "Цель" = '640' THEN 1 ELSE 0 END)                AS "640"
 from (SELECT *, split_part("Врач", ' ', 2) || ' ' || left(split_part("Врач", ' ', 3), 1) ||
              '.' || left(split_part("Врач", ' ', 4), 1) || '.' AS "Корпус Врач"
-      FROM oms_data) as oms
-WHERE ("Номер счёта" LIKE ANY (:list_months))
-  AND "Статус" IN ('2', '3')
-    and "Номер счёта" like '%I%'
+      FROM oms.oms_data) as oms
+WHERE "Отчетный период выгрузки" IN ({sql_cond})
+AND "Статус" IN :status_list
+    and "Код СМО" not like '360%'
 group by "ФИО Врача", "Корпус", "Профиль"
 order by "Корпус","Профиль", "ФИО Врача"
     """
 
-sql_query_by_doctors_stac = f"""
+def sql_query_by_doctors_stac(sql_cond):
+    return f"""
 select distinct "Корпус Врач"                                                                  as "ФИО Врача",
                 "Подразделение"                                                                as "Корпус",
                 CASE
@@ -92,9 +95,9 @@ select distinct "Корпус Врач"                                         
 
 from (SELECT *, split_part("Врач", ' ', 2) || ' ' || left(split_part("Врач", ' ', 3), 1) ||
              '.' || left(split_part("Врач", ' ', 4), 1) || '.' AS "Корпус Врач"
-      FROM oms_data) as oms
-WHERE ("Номер счёта" LIKE ANY (:list_months))
-  AND "Статус" IN ( '3')
+      FROM oms.oms_data) as oms
+WHERE "Отчетный период выгрузки" IN ({sql_cond})
+AND "Статус" IN :status_list
     and "Тип талона" = 'Стационар'
 group by "ФИО Врача", "Корпус", "Профиль"
 order by "Корпус","Профиль", "ФИО Врача"

@@ -11,7 +11,7 @@ app_tabs_by_doctor_cel = html.Div(
     [
         html.Div(
             [
-                dbc.Alert("Отчет по врачам оплаченные талоны", color="primary"),
+                dbc.Alert("Отчет по врачам", color="primary"),
                 dcc.Tabs(
                     [
                         dcc.Tab(label='Местные', value='tab1', selected_className='custom-tab--selected'),
