@@ -1,10 +1,10 @@
-import pandas as pd
 from dash import html, Input, Output, dash_table, dcc, State
-from app import app, engine
+from database.db_conn import engine
+from services.MosaicMed.app import app
 import dash_bootstrap_components as dbc
 
-from callback import TableUpdater
-from pages.it_department.generation_invoices.query import sql_gen_invoices, sql_gen_invoices_povt, sql_gen_name_check
+from services.MosaicMed.callback.callback import TableUpdater
+from services.MosaicMed.pages.it_department.generation_invoices.query import sql_gen_invoices, sql_gen_invoices_povt, sql_gen_name_check
 
 # Отчет для сборки талонов
 type_page = "gen_invoice"
@@ -15,7 +15,7 @@ tab_layout_other_gen_invoices = html.Div(
         html.Div(
             [
                 html.H5(
-                    'Отчет для сборки талонов по дате создания талона и цели. В статусах 1 и 6, 8',
+                    'Отчет для сборки талонов по дате создания талона и цели. Первичных и повторных',
                     className='label'),
 
                 dbc.Button(id=f'get-data-button-{type_page}', n_clicks=0, children='Получить данные'),
@@ -81,7 +81,7 @@ tab_layout_other_gen_invoices = html.Div(
                 html.Div(
                     [
                         html.H5(
-                            'Повторные - статусы 6 и 8',
+                            'Повторные - статусы 4, 6 и 8',
                             className='label'),
                         dash_table.DataTable(id=f'result-table2-{type_page}',
                                              columns=[],
