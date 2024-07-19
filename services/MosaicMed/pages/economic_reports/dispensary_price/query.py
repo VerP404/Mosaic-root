@@ -31,8 +31,8 @@ WITH data AS (SELECT 2024 - CAST(substring("Дата рождения" FROM LENG
                      round(SUM(CASE WHEN "Подразделение" = 'ОАПП №2' and "Пол" = 'Ж' THEN round(CAST("Сумма" AS numeric(15, 2)):: numeric, 2) ELSE 0 END):: numeric, 2) AS "Ж ОАПП2 Сумма",
                      SUM(CASE WHEN "Подразделение" = 'ОАПП №2' THEN 1 ELSE 0 END)              AS "ОАПП2",
                      round(SUM(CASE WHEN "Подразделение" = 'ОАПП №2' THEN round(CAST("Сумма" AS numeric(15, 2)):: numeric, 2) ELSE 0 END):: numeric, 2) AS "ОАПП2 Сумма"
-              FROM oms_data
-              WHERE (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+              FROM oms.oms_data
+              WHERE "Отчетный период выгрузки" IN ({sql_cond})
                 AND "Цель" IN :dv
                 AND "Статус" IN :status_list
                 AND "Тариф" != '0'

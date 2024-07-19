@@ -11,6 +11,7 @@ from services.MosaicMed.pages.doctors_talon.doctors_list.tab import app_tabs_doc
 from services.MosaicMed.pages.economic_reports.by_doctors.tab import app_tabs_by_doctor
 from services.MosaicMed.pages.economic_reports.by_doctors_cel.tab import app_tabs_by_doctor_cel
 from services.MosaicMed.pages.economic_reports.by_doctors_dispensary.tab import app_tabs_by_doctor_dispensary
+from services.MosaicMed.pages.economic_reports.dispensary_price.dispensary_price import tab_layout_dispensary_price
 from services.MosaicMed.pages.economic_reports.new_territories.tab import new_territories
 from services.MosaicMed.pages.economic_reports.reports.tab import app_tabs_econ_reports
 from services.MosaicMed.pages.economic_reports.route_children_dd.route_children_dd import tab_layout_route_children
@@ -34,7 +35,7 @@ routes = {
     "/econ/by-doctor-dispensary": app_tabs_by_doctor_dispensary,
     "/econ/new-territories": new_territories,
     "/econ/route-children": tab_layout_route_children,
-    "/econ/disp": html.H2("Экономические отчеты9"),
+    "/econ/disp": tab_layout_dispensary_price,
     "/econ/stationary": stationary,
     "/it/gen-invoices": html.H2("it1"),
     "/it/update-bd": tab_layout_it_update_bd,
