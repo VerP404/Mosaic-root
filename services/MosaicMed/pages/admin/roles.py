@@ -23,7 +23,6 @@ def get_modules():
             'dispensary-observation',
             'other-reports',
             'volumes',
-            'templates',
             'filling-lists',
             'wo-coupons',
             'dashboards',

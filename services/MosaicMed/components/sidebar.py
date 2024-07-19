@@ -163,11 +163,6 @@ def get_sidebar():
             nav_items.append(dbc.NavLink(
                 [html.I(className="fas fa-file-medical"), html.Span(" ЭЛН", className="nav-text", title="ЭЛН")],
                 href="/eln", active="exact", className="nav-item", id="nav-eln"))
-        if 'templates' in modules:
-            nav_items.append(dbc.NavLink([html.I(className="fas fa-file-alt"),
-                                          html.Span(" Шаблоны", className="nav-text", title="Шаблоны")],
-                                         href="/templates",
-                                         active="exact", className="nav-item", id="nav-templates"))
         if 'filling-lists' in modules:
             nav_items.append(dbc.NavLink([html.I(className="fas fa-edit"),
                                           html.Span(" Заполнение списков", className="nav-text",

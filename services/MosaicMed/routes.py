@@ -1,5 +1,6 @@
 from dash import html
 
+from services.MosaicMed.pages.WO_coupons.status_talon.tab import app_tabs_talon_wo
 from services.MosaicMed.pages.admin.settings import settings_layout
 from services.MosaicMed.pages.admin.users import users_layout
 from services.MosaicMed.pages.admin.roles import roles_layout
@@ -18,6 +19,7 @@ from services.MosaicMed.pages.economic_reports.route_children_dd.route_children_
 from services.MosaicMed.pages.economic_reports.stationary.tab import stationary
 from services.MosaicMed.pages.economic_reports.sv_pod.sv_pod import tab_layout_sv_pod
 from services.MosaicMed.pages.economic_reports.volumes_indicators.volumes_indicators import app_pgg_amb
+from services.MosaicMed.pages.filling_lists.tab import app_tabs_fil_list
 from services.MosaicMed.pages.it_department.cel_3.tab import app_tabs_cel3
 from services.MosaicMed.pages.it_department.for_smo.for_smo import tab_layout_for_smo
 from services.MosaicMed.pages.it_department.generation_invoices.generation_invoices import tab_layout_other_gen_invoices
@@ -58,9 +60,8 @@ routes = {
     "/eln": html.H2("ЭЛН"),
     "/volumes/target": html.H2("Талоны"),
     "/volumes/finance": html.H2("Финансы"),
-    "/templates": html.H2("Шаблоны"),
-    "/filling-lists": html.H2("Списки"),
-    "/wo-coupons": html.H2("Веб ОМС"),
+    "/filling-lists": app_tabs_fil_list,
+    "/wo-coupons": app_tabs_talon_wo,
     "/dashboard/chef": html.H2("Главный врач"),
     "/dashboard/patient": html.H2("Пациент"),
 }
