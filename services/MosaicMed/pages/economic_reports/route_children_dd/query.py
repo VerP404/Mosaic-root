@@ -1,13 +1,13 @@
-def sql_query_route_children_old(sql_cond=None):
+def sql_query_route_children_old(sql_cond):
     return f"""
 WITH RankedData AS (SELECT *,
                            ROW_NUMBER() OVER (PARTITION BY "Номер талона" ORDER BY (SELECT NULL)) AS RowNum
                     FROM (
-                            SELECT detail_dd_data."Тип талона" as "Цель в талоне",
-                                   detail_dd_data."Статус" as "Статус талона",
+                            SELECT oms.detaildd_data."Тип талона" as "Цель в талоне",
+                                   oms.detaildd_data."Статус" as "Статус талона",
                                    *
                             FROM
-                            detail_dd_data left join oms_data on detail_dd_data."Номер талона" = oms_data."Талон") as svod)
+                            oms.detaildd_data left join oms.oms_data on oms.detaildd_data."Номер талона" = oms.oms_data."Талон") as svod)
 SELECT "Маршрут",
        count(*) as "К-во",
        SUM(CASE WHEN "Пол" = 'Ж' THEN 1 ELSE 0 END) AS "ДП1",
@@ -22,7 +22,7 @@ SELECT "Маршрут",
 
 FROM RankedData
 WHERE RowNum = 1
-and (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+and "Отчетный период выгрузки" IN ({sql_cond})
   and "Цель в талоне" = 'ПН1'
   AND "Тариф" != '0'
     and "Код СМО" like '360%'
@@ -66,7 +66,7 @@ order by case
 """
 
 
-def sql_query_route_children(sql_cond=None):
+def sql_query_route_children(sql_cond):
     return f"""
     WITH osm as (select "Талон",
                     "Статус",
@@ -75,8 +75,8 @@ def sql_query_route_children(sql_cond=None):
                     "Код СМО",
                     "Подразделение",
                     "Цель"
-             from oms_data
-             where (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+             from oms.oms_data
+             where "Отчетный период выгрузки" IN ({sql_cond})
                   and "Цель" = 'ПН1'
                   AND "Тариф" != '0'
                     and "Код СМО" like '360%'
@@ -86,7 +86,7 @@ def sql_query_route_children(sql_cond=None):
      detailed as (select ROW_NUMBER() OVER (PARTITION BY "Номер талона" ORDER BY (SELECT NULL)) AS RowNum,
                        "Номер талона",
                        "Маршрут"
-                from detail_dd_data
+                from oms.detaildd_data
                 where "Тип талона" = 'ПН1' 
                 ),
      detail_uniq as (select "Номер талона",

@@ -1,51 +1,47 @@
-from datetime import datetime, timedelta
-from dash import html, dcc, Output, Input
+from datetime import datetime
+from dash import html, Output, Input
+import dash_bootstrap_components as dbc
 
 from database.db_conn import engine
 from services.MosaicMed.app import app
 
 from services.MosaicMed.callback.callback import get_selected_dates, TableUpdater
 from services.MosaicMed.generate_pages.elements import card_table
+from services.MosaicMed.generate_pages.filters import date_start, date_end
 from services.MosaicMed.pages.economic_reports.new_territories.query import sqlquery_new_territory
 
 type_page = "new-territories-tab1"
 
 new_territories_tab1 = html.Div(
     [
-        # Блок 1: Выбор элемента из списка
-        html.Div(
-            [
-                html.H3('Фильтры', className='label'),
-                html.Div(
-                    [
-                        html.Div([
-                            html.Label('Дата начала:', style={'width': '120px', 'display': 'inline-block'}),
-                            dcc.DatePickerSingle(
-                                id=f'date-picker-start-{type_page}',
-                                first_day_of_week=1,
-                                date=datetime.now().date() - timedelta(days=1),  # Устанавливаем начальную дату
-                                display_format='DD.MM.YYYY',
-                                className='filter-date'
+        dbc.Row(
+            dbc.Col(
+                dbc.Card(
+                    dbc.CardBody(
+                        [
+                            dbc.CardHeader("Фильтры"),
+                            dbc.Row(
+                                [
+                                    date_start('начало:', type_page),
+                                    date_end('окончание:', type_page),
+                                ]
                             ),
-                        ], className='filters'),
-                        html.Div([
-                            html.Label('Дата окончания:', style={'width': '120px', 'display': 'inline-block'}),
-                            dcc.DatePickerSingle(
-                                id=f'date-picker-end-{type_page}',
-                                first_day_of_week=1,
-                                date=datetime.now().date() - timedelta(days=1),  # Устанавливаем конечную дату
-                                display_format='DD.MM.YYYY',
-                                className='filter-date'
-                            ),
-                        ], className='filters'),
-                    ], className='filters-line'),
-                html.Div(id=f'selected-spec-{type_page}', className='filters-label', style={'display': 'none'}),
-                html.Div(id=f'selected-date-{type_page}', className='filters-label'),
-            ], className='filter'),
-        # Блок 2: Диспансеризация
-        card_table(f'result-table-{type_page}',
-                   "Отчет по пациентам с полисами новых территорий по дате завершения лечения"),
-    ]
+                            html.Div(id=f'selected-doctor-{type_page}', className='filters-label',
+                                     style={'display': 'none'}),
+                            html.Div(id=f'selected-period-{type_page}', className='filters-label',
+                                     style={'display': 'none'}),
+                        ]
+                    ),
+                    style={"width": "100%", "padding": "0rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                           "border-radius": "10px"}
+                ),
+                width=12
+            ),
+            style={"margin": "0 auto", "padding": "0rem"}
+        ),
+        card_table(f'result-table-{type_page}', "Отчет по пациентам с полисами новых территорий по дате завершения лечения"),
+    ],
+    style={"padding": "0rem"}
 )
 
 

@@ -1,4 +1,4 @@
-from dash import html, dcc, Output, Input, dash_table, exceptions, State
+from dash import html, dcc, Output, Input, exceptions, State
 import dash_bootstrap_components as dbc
 from database.db_conn import engine
 from services.MosaicMed.app import app
@@ -6,11 +6,9 @@ from services.MosaicMed.callback.callback import TableUpdater, get_current_repor
 from services.MosaicMed.callback.slider_months import get_selected_period
 from services.MosaicMed.generate_pages.elements import card_table
 from services.MosaicMed.generate_pages.filters import filter_years, filter_months, filter_status
-from services.MosaicMed.pages.doctors_talon.doctors_list.query import sql_query_by_doc
-from services.MosaicMed.generate_pages.constants import status_groups, months_labels, months_sql_labels
+from services.MosaicMed.generate_pages.constants import status_groups, months_labels
 from services.MosaicMed.pages.economic_reports.reports.query import sql_query_econ_1, sql_query_econ_4, \
     sql_query_econ_3, sql_query_econ_2
-from services.MosaicMed.pages.economic_reports.sv_pod.query import sql_qery_sv_pod
 
 type_page = "ec-rep"
 alert_text_amb = """- Посещения - 1, 5, 7, 9, 10, 14, 140, 640

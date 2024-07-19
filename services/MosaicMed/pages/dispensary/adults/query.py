@@ -1,5 +1,6 @@
 # отчет по диспансеризации
-sql_query_dispensary = """
+def sql_query_dispensary():
+    return """
     SELECT
         coalesce("Подразделение", 'Итого')              as Корпус,
         sum(case when "Цель" = 'ДВ4' then 1 else 0 end) as ДВ4,

@@ -13,6 +13,7 @@ from services.MosaicMed.pages.economic_reports.by_doctors_cel.tab import app_tab
 from services.MosaicMed.pages.economic_reports.by_doctors_dispensary.tab import app_tabs_by_doctor_dispensary
 from services.MosaicMed.pages.economic_reports.new_territories.tab import new_territories
 from services.MosaicMed.pages.economic_reports.reports.tab import app_tabs_econ_reports
+from services.MosaicMed.pages.economic_reports.route_children_dd.route_children_dd import tab_layout_route_children
 from services.MosaicMed.pages.economic_reports.sv_pod.sv_pod import tab_layout_sv_pod
 from services.MosaicMed.pages.economic_reports.volumes_indicators.volumes_indicators import app_pgg_amb
 from services.MosaicMed.pages.it_department.update_database.update_database import tab_layout_it_update_bd
@@ -31,7 +32,7 @@ routes = {
     "/econ/by-doctor-cel": app_tabs_by_doctor_cel,
     "/econ/by-doctor-dispensary": app_tabs_by_doctor_dispensary,
     "/econ/new-territories": new_territories,
-    "/econ/route-children": html.H2("Экономические отчеты8"),
+    "/econ/route-children": tab_layout_route_children,
     "/econ/disp": html.H2("Экономические отчеты9"),
     "/it/gen-invoices": html.H2("it1"),
     "/it/update-bd": tab_layout_it_update_bd,
