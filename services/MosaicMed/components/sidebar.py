@@ -95,6 +95,7 @@ def get_sidebar():
                     dbc.DropdownMenuItem("Новые территории", href="/econ/new-territories"),
                     dbc.DropdownMenuItem("Маршруты ПН1", href="/econ/route-children"),
                     dbc.DropdownMenuItem("Диспансеризация по возрастам", href="/econ/disp"),
+                    dbc.DropdownMenuItem("Стационары", href="/econ/stationary"),
                 ],
                 label=[html.I(className="fas fa-dollar-sign"),
                        html.Span(" Экономические отчеты", className="nav-text", title="Экономические отчеты")],

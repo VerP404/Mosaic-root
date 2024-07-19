@@ -1,4 +1,4 @@
-def sql_query_stationary(sql_cond=None):
+def sql_query_stationary(sql_cond):
     return f"""
 WITH main_query AS (
     SELECT "КСГ",
@@ -90,10 +90,10 @@ WITH main_query AS (
                                              THEN round(CAST("Сумма" AS numeric(15, 2)):: numeric, 2)
                                          ELSE 0 END):: numeric,
                                  2)                                                     AS "ДП8 Сумма"
-                   FROM oms_data
+                   FROM oms.oms_data
     WHERE "Тип талона" = 'Стационар'
       AND "КСГ" <> 'КСГ не найдена'
-      AND (("Номер счёта" LIKE ANY (:list_months)) {sql_cond})
+      AND "Отчетный период выгрузки" IN ({sql_cond})
       AND "Статус" IN :status_list
       AND "Цель" IN :cel_list
       AND "Тариф" != '0'

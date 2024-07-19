@@ -6,8 +6,7 @@ from services.MosaicMed.callback.callback import TableUpdater, get_current_repor
 from services.MosaicMed.callback.slider_months import get_selected_period
 from services.MosaicMed.generate_pages.elements import card_table
 from services.MosaicMed.generate_pages.filters import filter_years, filter_months, filter_status
-from services.MosaicMed.pages.doctors_talon.doctors_list.query import sql_query_by_doc
-from services.MosaicMed.generate_pages.constants import status_groups, months_labels, months_sql_labels
+from services.MosaicMed.generate_pages.constants import status_groups, months_labels
 from services.MosaicMed.pages.economic_reports.sv_pod.query import sql_qery_sv_pod
 
 type_page = "sv-pod"
