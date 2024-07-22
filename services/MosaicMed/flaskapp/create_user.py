@@ -1,5 +1,5 @@
 # create_user.py
-from services.MosaicMed.authentication.models import User
+from services.MosaicMed.flaskapp.models import User
 from database.db_conn import init_db
 
 # Инициализируем базу данных

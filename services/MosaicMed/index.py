@@ -2,7 +2,7 @@
 from dash import Input, Output, dcc, html
 from flask_login import current_user
 
-from services.MosaicMed.authentication.models import user_has_access
+from services.MosaicMed.flaskapp.models import user_has_access
 from services.MosaicMed.app import app
 from services.MosaicMed.components.content import content
 from services.MosaicMed.components.footer import footer
@@ -13,18 +13,22 @@ from services.MosaicMed.callback.date_reports import get_current_reporting_month
 from database.db_conn import init_db
 from services.MosaicMed.routes import routes
 
+MosaicMed_layout = html.Div([
+    header,
+    html.Div([
+        html.Div(id='sidebar-container'),
+        content
+    ], style={"position": "relative"}),
+    footer
+])
+
 app.layout = html.Div(
     [
         dcc.Store(id='current-month-number', data=None),
         dcc.Store(id='current-month-name', data=None),
         dcc.Interval(id='date-interval-main', interval=600000, n_intervals=0),  # 1 час
         dcc.Location(id="url"),
-        header,
-        html.Div([
-            html.Div(id='sidebar-container'),
-            content
-        ], style={"position": "relative"}),
-        footer
+        MosaicMed_layout
     ]
 )
 
@@ -79,4 +83,4 @@ def render_page_content(pathname):
 
 if __name__ == "__main__":
     init_db()
-    app.run_server(debug=True, host='0.0.0.0', port='8080')
+    app.run_server(debug=True, host='0.0.0.0', port='8010')

@@ -59,7 +59,7 @@ select "Подразделение" as Тип,
           GROUP BY ROLLUP("Подразделение")) as tab
 """
 
-sql_query_visits_korpus_spec = """
+sql_query_visits_korpus_spec = r"""
 select "Подразделение",
             case 
             WHEN "Врач (Профиль МП)" ~ '\(.*\)' THEN

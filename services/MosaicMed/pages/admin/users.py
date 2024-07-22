@@ -3,7 +3,7 @@ from dash import html, dcc, dash_table, callback_context
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from services.MosaicMed.app import app
-from services.MosaicMed.authentication.models import User, UserModel, SessionLocal, bcrypt
+from services.MosaicMed.flaskapp.models import User, UserModel, SessionLocal, bcrypt
 
 def fetch_all_users():
     session = SessionLocal()

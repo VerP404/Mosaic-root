@@ -5,7 +5,7 @@ from flask_login import current_user
 
 from database.db_conn import SessionLocal
 # from services.MosaicMed import dashboard_chef, dashboard_patient, short_name_mo
-from services.MosaicMed.authentication.models import RoleModuleAccess
+from services.MosaicMed.flaskapp.models import RoleModuleAccess
 from services.MosaicMed.pages.admin.settings import get_setting
 SIDEBAR_CONTENT_STYLE_HIDE_SCROLL = {
     "overflow-y": "scroll",

@@ -66,6 +66,6 @@ routes = {
     "/volumes/finance": html.H2("Финансы"),
     "/filling-lists": app_tabs_fil_list,
     "/wo-coupons": app_tabs_talon_wo,
-    "/dashboard/chef": html.H2("Главный врач"),
+    "/dashboard/chef": html.H2("Пациент"),
     "/dashboard/patient": html.H2("Пациент"),
 }

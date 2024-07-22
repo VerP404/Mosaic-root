@@ -5,7 +5,7 @@ from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from services.MosaicMed.app import app
-from services.MosaicMed.authentication.models import Setting, SessionLocal, Department
+from services.MosaicMed.flaskapp.models import Setting, SessionLocal, Department
 import pandas as pd
 
 

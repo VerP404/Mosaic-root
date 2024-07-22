@@ -1,7 +1,7 @@
 # flask_app.py
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from services.MosaicMed.authentication.models import User  # Корректный путь к модели User
+from services.MosaicMed.flaskapp.models import User  # Корректный путь к модели User
 from datetime import timedelta
 
 flask_app = Flask(__name__)
