@@ -2,7 +2,7 @@
 ROOT_DATABASE = {
     'dbname': 'mosaic_db',
     'user': 'postgres',
-    'password': 'postgres',
+    'password': 'Qaz123',
     'host': 'localhost',
     'port': '5432',
 }

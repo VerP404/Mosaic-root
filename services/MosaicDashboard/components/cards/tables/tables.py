@@ -1,6 +1,6 @@
 # MosaicDashboard/components/tables/tables.py
 import pandas as pd
-from MosaicDashboard.components.cards.tables.table_utils import generate_table
+from services.MosaicDashboard.components.cards.tables.table_utils import generate_table
 
 # Доступность первичной записи к ВОП, терапевтам и педиатрам
 data1 = {

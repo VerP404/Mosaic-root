@@ -2,10 +2,10 @@
 from dash import html
 import dash_bootstrap_components as dbc
 
-from MosaicDashboard import main_color
-from MosaicDashboard.components.cards.graphs.graphs import bar_chart1, stacked_bar_chart1, pie_chart1, bar_chart2
-from MosaicDashboard.components.cards.cards_utils import create_card
-from MosaicDashboard.components.cards.tables.tables import card_table_1, card_table_2, card_table_3, card_table_4
+from services.MosaicDashboard import main_color
+from services.MosaicDashboard.components.cards.graphs.graphs import bar_chart1, stacked_bar_chart1, pie_chart1, bar_chart2
+from services.MosaicDashboard.components.cards.cards_utils import create_card
+from services.MosaicDashboard.components.cards.tables.tables import card_table_1, card_table_2, card_table_3, card_table_4
 
 # Определяем стиль контента
 CONTENT_STYLE = {

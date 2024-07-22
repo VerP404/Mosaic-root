@@ -6,11 +6,11 @@ import dash
 import dash_bootstrap_components as dbc
 from sqlalchemy import create_engine
 
-from MosaicDashboard import main_color
-from db_setup.db_settings import DATABASE_URL
-from MosaicDashboard.components.header import header
-from MosaicDashboard.components.footer import footer
-from MosaicDashboard.components.content import content
+from database.db_settings import DATABASE_URL
+from services.MosaicDashboard import main_color
+from services.MosaicDashboard.components.header import header
+from services.MosaicDashboard.components.footer import footer
+from services.MosaicDashboard.components.content import content
 from dash import dcc, html, Output, Input
 
 # Создание приложения Dash
@@ -51,6 +51,5 @@ def update_time(n):
     return datetime.now().strftime("%d-%m-%Y %H:%M")
 
 
-
 if __name__ == "__main__":
-    app.run_server(debug=False, host='0.0.0.0', port='8070')
+    app.run_server(debug=False, host='0.0.0.0', port='8020')

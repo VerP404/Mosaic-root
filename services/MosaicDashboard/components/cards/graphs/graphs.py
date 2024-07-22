@@ -1,5 +1,5 @@
 import pandas as pd
-from MosaicDashboard.components.cards.graphs.graph_utils import create_bar_chart, create_stacked_bar_chart, \
+from services.MosaicDashboard.components.cards.graphs.graph_utils import create_bar_chart, create_stacked_bar_chart, \
     create_pie_chart
 
 # Данные для графика

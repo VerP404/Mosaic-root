@@ -1,7 +1,7 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-from MosaicDashboard import main_color
+from services.MosaicDashboard import main_color
 
 # Определяем заголовок с логотипом и временем
 header = dbc.Row(
