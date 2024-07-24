@@ -1,4 +1,4 @@
-from dash import html
+from dash import html, dcc
 
 from services.MosaicMed.callback.redirect_href import dashboard_chef_layout
 from services.MosaicMed.pages.WO_coupons.status_talon.tab import app_tabs_talon_wo
@@ -53,6 +53,7 @@ routes = {
     "/it/stat-months": tab_layout_other_stat_months,
     "/it/for-smo": tab_layout_for_smo,
     "/it/cel3": app_tabs_cel3,
+    "/it/files_loader": html.Div(dcc.Location(href="/it/files_loader", id='dashboard-chef-redirect')),
     "/admin/users": users_layout,
     "/admin/roles": roles_layout(),
     "/admin/settings": settings_layout,

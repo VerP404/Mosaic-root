@@ -122,6 +122,7 @@ def get_sidebar():
                     dbc.DropdownMenuItem("Месяцы по статусам", href="/it/stat-months"),
                     dbc.DropdownMenuItem("Месяцы по смо", href="/it/for-smo"),
                     dbc.DropdownMenuItem("Цель 3", href="/it/cel3"),
+                    dbc.DropdownMenuItem("Сохранить файлы", href="/it/files_loader"),
                 ],
                 label=[html.I(className="fas fa-desktop"),
                        html.Span(" IT отдел", className="nav-text", title="IT отдел")],

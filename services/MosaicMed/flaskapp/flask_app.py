@@ -1,6 +1,8 @@
 # flask_app.py
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+
+from services.MosaicMed.flaskapp.file_loader import file_loader_bp
 from services.MosaicMed.flaskapp.models import User  # Корректный путь к модели User
 from datetime import timedelta
 
@@ -15,9 +17,11 @@ login_manager = LoginManager()
 login_manager.init_app(flask_app)
 login_manager.login_view = 'login'
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
+
 
 @flask_app.route('/')
 def index():
@@ -25,6 +29,7 @@ def index():
         return redirect('/main')
     else:
         return redirect('/login')
+
 
 @flask_app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -40,8 +45,12 @@ def login():
             error = 'Ошибка входа. Проверьте правильность введенных данных'
     return render_template('login.html', error=error)
 
+
 @flask_app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+
+flask_app.register_blueprint(file_loader_bp)
