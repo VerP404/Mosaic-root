@@ -13,7 +13,7 @@ FROM oms.oms_data
 WHERE "Статус" = '3'
   AND "Санкции" IS NULL
   AND "Код СМО" like '360%'
-GROUP BY "Отчетный период выгрузки"
+GROUP BY "Месяц"
 UNION ALL
 SELECT 'Итого',
        SUM(CASE WHEN "Цель" in ('30', '301', '305') THEN 1 ELSE 0 END) AS "Обращения",
@@ -53,7 +53,7 @@ FROM oms.oms_data
 WHERE "Статус" = '3'
   AND "Санкции" IS NULL
   AND "Код СМО" like '360%'
-GROUP BY "Отчетный период выгрузки"
+GROUP BY "Месяц"
 UNION ALL
 SELECT 'Итого',
        SUM(CASE WHEN "Цель" in ('ДВ4') THEN 1 else 0 END)              AS "ДВ4",
@@ -91,7 +91,7 @@ WHERE "Статус" = '3'
   AND "Тип талона" = 'Стационар'
   AND "Санкции" IS NULL
   AND "Код СМО" like '360%'
-GROUP BY "Отчетный период выгрузки"
+GROUP BY "Месяц"
 UNION ALL
 SELECT 'Итого',
         count(*) as "Всего",

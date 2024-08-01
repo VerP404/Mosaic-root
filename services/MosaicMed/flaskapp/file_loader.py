@@ -9,39 +9,43 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../fil
 # Словарь с типами данных, внутренними папками, расширениями и ожидаемыми заголовками
 file_info = {
     'info': {
-        'area_data': ('csv', 'участки', ['header1', 'header2', 'header3'],
-                      {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'}),
-        'dn168n_data': ('csv', '168н', ['header1', 'header2', 'header3'],
-                        {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'}),
+        'area_data': ('csv', 'участки', ['Корпус', 'Участок', 'Врач'],
+                      {'sep': ';', 'low_memory': False, 'dtype': 'str'}),
+        'dn168n_data': ('csv', '168н', ['Код МКБ', 'Профиль', 'Специальность'],
+                        {'sep': ';', 'low_memory': False, 'dtype': 'str'}),
         'naselenie_data': ('xlsx', 'население', ['ФИО Врача', 'Корпус', 'Профиль'], {'dtype': 'str'})
     },
     'iszl': {
-        'iszl_data': ('xlsx', 'исзл', ['header1', 'header2', 'header3'], {'dtype': 'str'}),
-        'people_data': ('csv', 'люди', ['header1', 'header2', 'header3'],
-                        {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'})
+        'iszl_data': ('csv', 'ИСЗЛ', ['pID', 'ldwID', 'pdwID'],
+                      {'sep': ';', 'low_memory': False, 'dtype': 'str', 'encoding': 'cp1251'}),
+        'people_data': ('csv', 'население', ['PID', 'FIO', 'DR'],
+                        {'sep': ';', 'low_memory': False, 'dtype': 'str'})
     },
     'kvazar': {
-        'emd_data': ('csv', 'эмд', ['header1', 'header2', 'header3'],
-                     {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'}),
-        'flu_data': ('csv', 'флю', ['header1', 'header2', 'header3'],
-                     {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'}),
-        'ln_data': ('csv', 'лн', ['header1', 'header2', 'header3'],
-                    {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'}),
-        'obrdoc_data': ('xlsx', 'обрдок', ['header1', 'header2', 'header3'], {'dtype': 'str'}),
-        'obrproc_data': ('csv', 'обрпроц', ['header1', 'header2', 'header3'],
-                         {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'}),
-        'slotepgu1_data': ('csv', 'слоты1', ['header1', 'header2', 'header3'],
-                           {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'}),
-        'slotepgu14_data': ('csv', 'слоты14', ['header1', 'header2', 'header3'],
-                            {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'})
+        'emd_data': ('csv', 'ЭМД', ['ИД', 'ИД исходного ЭПМЗ', 'Дата документа'],
+                     {'sep': ';', 'low_memory': False, 'dtype': 'str', 'encoding': 'cp1251'}),
+        'flu_data': ('csv', '', ['', '', ''],
+                     {'sep': ';', 'low_memory': False, 'dtype': 'str', 'encoding': 'cp1251'}),
+        'ln_data': ('csv', 'ЛН', ['Номер', 'ЭЛН', 'Дубликат'],
+                    {'sep': ';', 'low_memory': False, 'dtype': 'str', 'encoding': 'cp1251'}),
+        'obrdoc_data': ('csv', 'обращений', ['Фамилия', 'Имя', 'Отчество'],
+                        {'sep': ';', 'low_memory': False, 'dtype': 'str', 'encoding': 'cp1251'}),
+        'obrproc_data': ('csv', 'процедур', ['Фамилия', 'Имя', 'Отчество'],
+                         {'sep': ';', 'low_memory': False, 'dtype': 'str', 'encoding': 'cp1251'}),
+        'slotepgu1_data': (
+            'csv', 'слоты на ЕГПУ', ['Наименование МО', 'Обособленное подразделение', 'Наименование должности'],
+            {'sep': ';', 'low_memory': False, 'dtype': 'str', 'encoding': 'cp1251'}),
+        'slotepgu14_data': (
+            'csv', 'слоты на ЕГПУ', ['Наименование МО', 'Обособленное подразделение', 'Наименование должности'],
+            {'sep': ';', 'low_memory': False, 'dtype': 'str', 'encoding': 'cp1251'})
     },
     'oms': {
-        'detailed_data': ('csv', 'детали', ['header1', 'header2', 'header3'],
+        'detailed_data': ('csv', 'детализации диспансеризации', ['Номер талона', 'Счет', 'Дата выгрузки'],
                           {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'}),
-        'doctors_oms_data': ('csv', 'врачи', ['header1', 'header2', 'header3'],
+        'doctors_oms_data': ('csv', 'врачей', ['СНИЛС:', 'Код врача:', 'Фамилия:'],
                              {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'}),
-        'oms_data': ('csv', 'омс', ['Талон', 'Источник', 'ID источника'],
-                             {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'})
+        'oms_data': ('csv', 'ОМС', ['Талон', 'Источник', 'ID источника'],
+                     {'sep': ';', 'low_memory': False, 'na_values': '-', 'dtype': 'str'})
     }
 }
 

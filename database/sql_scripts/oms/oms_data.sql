@@ -59,7 +59,8 @@ create table oms.oms_data
     "Представитель"                   text,
     "Доп. инф. о статусе талона"      text,
     "КСЛП"                            text,
-    "Источник оплаты"                 text
+    "Источник оплаты"                 text,
+    "Отчетный период выгрузки"        text
 );
 
 alter table oms.oms_data
