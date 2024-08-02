@@ -12,10 +12,10 @@ if __name__ == "__main__":
     # Создаем пользователя admin
     create_user(
         username="admin",
-        password="password",  # Убедитесь, что используете сильный пароль
-        last_name="Admin",
-        first_name="Admin",
-        middle_name="Adminovich",
+        password="440856Mo",  # Убедитесь, что используете сильный пароль
+        last_name="Родионов",
+        first_name="Дмитрий",
+        middle_name="Николаевич",
         birth_date="1992-07-26",
         position="Administrator",
         role="admin",
