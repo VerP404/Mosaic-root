@@ -1,4 +1,6 @@
 import os
+import platform
+
 from dash import html, dcc, Input, Output, State
 import subprocess
 import dash_bootstrap_components as dbc
@@ -9,7 +11,12 @@ from services.MosaicMed.callback.callback import query_last_record_sql, last_fil
 # Определяем базовый путь к скриптам и папкам
 script_dir = os.path.dirname(os.path.abspath(__file__))
 base_script_path = os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'database', 'to_database'))
-venv_python = os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', '.venv', 'Scripts', 'python.exe'))
+# Определяем путь к Python в зависимости от операционной системы
+if platform.system() == 'Windows':
+    venv_python = os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', '.venv', 'Scripts', 'python.exe'))
+else:
+    venv_python = os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', '.venv', 'bin', 'python'))
+
 
 file_paths = {
     'oms': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'oms', 'oms_data')),
