@@ -1,7 +1,11 @@
 # index.py
+import os
+import sys
+
 from dash import Input, Output, dcc, html
 from flask_login import current_user
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 from services.MosaicMed.flaskapp.models import user_has_access
 from services.MosaicMed.app import app
 from services.MosaicMed.components.content import content
@@ -83,4 +87,4 @@ def render_page_content(pathname):
 
 if __name__ == "__main__":
     init_db()
-    app.run_server(debug=True, host='0.0.0.0', port='8010')
+    app.run_server(debug=True, host='0.0.0.0', port='5000')

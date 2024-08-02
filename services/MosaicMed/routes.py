@@ -20,7 +20,6 @@ from services.MosaicMed.pages.economic_reports.route_children_dd.route_children_
 from services.MosaicMed.pages.economic_reports.stationary.tab import stationary
 from services.MosaicMed.pages.economic_reports.sv_pod.sv_pod import tab_layout_sv_pod
 from services.MosaicMed.pages.economic_reports.volumes_indicators.volumes_indicators import app_pgg_amb
-# from services.MosaicMed.pages.economic_reports.volumes_indicators.volumes_indicators import app_pgg_amb
 from services.MosaicMed.pages.eln.tab import app_tabs_eln
 from services.MosaicMed.pages.filling_lists.tab import app_tabs_fil_list
 from services.MosaicMed.pages.iszl.disp_nabl.tab import app_tabs_iszl_disp_nab
