@@ -1,7 +1,7 @@
 import os
 import sys
-from psycopg2 import sql
 import psycopg2
+from psycopg2 import sql
 
 # Добавляем родительский каталог в путь поиска модулей
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -10,7 +10,7 @@ from database.db_settings import ROOT_DATABASE
 
 def create_database_and_user():
     conn = psycopg2.connect(
-        dbname=ROOT_DATABASE['dbname'],
+        dbname='postgres',
         user=ROOT_DATABASE['user'],
         password=ROOT_DATABASE['password'],
         host=ROOT_DATABASE['host'],
@@ -59,16 +59,13 @@ def execute_sql_scripts():
     def execute_sql_scripts_from_directory(cursor, directory):
         for root, _, files in os.walk(directory):
             for filename in files:
-                if filename.endswith('.sql') and filename != 'schemas.sql':
+                if filename.endswith('.sql'):
                     file_path = os.path.join(root, filename)
                     execute_sql_file(cursor, file_path)
 
     try:
         with conn.cursor() as cur:
             sql_scripts_directory = os.path.join(os.path.dirname(__file__), 'sql_scripts')
-            schemas_sql_path = os.path.join(sql_scripts_directory, 'schemas.sql')
-            if os.path.isfile(schemas_sql_path):
-                execute_sql_file(cur, schemas_sql_path)
             execute_sql_scripts_from_directory(cur, sql_scripts_directory)
     except psycopg2.Error as e:
         print(f"Ошибка при создании схем или таблиц: {e}")
