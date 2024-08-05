@@ -153,7 +153,7 @@ def update_color_indicator(n_clicks):
             indicator_files(
                 n_clicks,
                 query_last_record_sql(schema_names[log_name.split('_')[0]], log_name),
-                last_file_csv_in_directory(file_path)
+                last_file_csv_in_directory(file_path)[0]  # Используем только первый элемент кортежа
             )
             for log_name, file_path in zip(
                 ['oms_log', 'people_log', 'iszl_log', 'emd_log', 'doctors_oms_log', 'area_log', 'dn168n_log', 'obrproc_log', 'detaildd_log', 'ln_log', 'obrproc_log'],
@@ -174,7 +174,8 @@ def update_text(n_clicks):
             f"Последний файл загруженный в БД: {query_last_record_sql(schema_names[log_name.split('_')[0]], log_name)}" for log_name in
             ['oms_log', 'people_log', 'iszl_log', 'emd_log', 'doctors_oms_log', 'area_log', 'dn168n_log', 'obrproc_log', 'detaildd_log', 'ln_log', 'obrproc_log']
         ) + tuple(
-            f"Последний файл для загрузки в БД: {last_file_csv_in_directory(file_path)}" for file_path in list(file_paths.values())
+            f"Последний файл для загрузки в БД: {last_file_csv_in_directory(file_path)[0] or 'Нет файла в папке'}" for file_path in list(file_paths.values())
         )
     except ProgrammingError as e:
         return tuple(f"Ошибка: {str(e)}" for _ in range(22))
+

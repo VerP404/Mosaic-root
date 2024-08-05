@@ -92,27 +92,26 @@ def last_file_csv_in_directory(directory):
     try:
         # Проверка существования директории
         if not os.path.exists(directory):
-            return "Директория не найдена"
+            return None, f"Директория не найдена: {directory}"
 
-        # Получение списка файлов в папке
+        # Получение списка файлов в директории
         files = os.listdir(directory)
 
-        # Фильтрация файлов по расширению .csv
+        # Фильтрация списка файлов по расширению .csv
         csv_files = [file for file in files if file.endswith('.csv')]
 
-        # Проверка наличия csv файлов
-        if not csv_files:
-            return "В папке нет файлов"
-
-        # Сортировка файлов по дате изменения в обратном порядке
+        # Сортировка файлов по дате последнего изменения
         sorted_files = sorted(csv_files, key=lambda x: os.path.getmtime(os.path.join(directory, x)), reverse=True)
+
         if sorted_files:
             latest_file = sorted_files[0]
-            return latest_file
+            return latest_file, None
         else:
-            return "В папке нет файлов"
+            return None, 'Нет CSV файлов в директории'
+
     except Exception as e:
-        return f"Ошибка: {str(e)}"
+        return None, f"Ошибка: {str(e)}"
+
 
 class TableUpdater:
     def __init__(self, engine):
