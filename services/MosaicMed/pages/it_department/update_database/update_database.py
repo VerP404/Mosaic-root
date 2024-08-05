@@ -1,6 +1,5 @@
 import os
 import platform
-
 from dash import html, dcc, Input, Output, State
 import subprocess
 import dash_bootstrap_components as dbc
@@ -11,10 +10,10 @@ from services.MosaicMed.callback.callback import query_last_record_sql, last_fil
 # Определяем базовый путь к скриптам и папкам
 script_dir = os.path.dirname(os.path.abspath(__file__))
 base_script_path = os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'database', 'to_database'))
-# Определяем путь к Python в зависимости от операционной системы
+
+# Определяем путь к интерпретатору Python в зависимости от операционной системы
 if platform.system() == 'Windows':
-    venv_python = os.path.abspath(
-        os.path.join(script_dir, '..', '..', '..', '..', '..', '.venv', 'Scripts', 'python.exe'))
+    venv_python = os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', '.venv', 'Scripts', 'python.exe'))
 else:
     venv_python = os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', '.venv', 'bin', 'python'))
 
@@ -23,20 +22,16 @@ file_paths = {
     'people': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'iszl', 'people_data')),
     'iszl': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'iszl', 'iszl_data')),
     'emd': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'kvazar', 'emd_data')),
-    'doctors': os.path.abspath(
-        os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'oms', 'doctors_oms_data')),
+    'doctors': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'oms', 'doctors_oms_data')),
     'area': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'info', 'area_data')),
     'dn168n': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'info', 'dn168n_data')),
-    'obrprocedur': os.path.abspath(
-        os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'kvazar', 'obrproc_data')),
-    'detailed': os.path.abspath(
-        os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'oms', 'detailed_data')),
+    'obrprocedur': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'kvazar', 'obrproc_data')),
+    'detailed': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'oms', 'detailed_data')),
     'ln': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'kvazar', 'ln_data')),
     'obrdoc': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'kvazar', 'obrdoc_data'))
 }
-print(os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'oms', 'oms_data')))
+
 schema_names = {
-    # Таблица: Схема
     'oms': 'oms',
     'doctors': 'oms',
     'detaildd': 'oms',
@@ -54,7 +49,6 @@ schema_names = {
 
 type_page = "update-bd"
 
-
 # Функция для создания компонента обновления файла
 def create_update_file_component(index, title, path_script):
     return html.Div(
@@ -70,7 +64,6 @@ def create_update_file_component(index, title, path_script):
         ]
     )
 
-
 # Определение страницы
 tab_layout_it_update_bd = html.Div(
     [
@@ -78,33 +71,21 @@ tab_layout_it_update_bd = html.Div(
             [
                 dbc.Button('Проверить актуальность файлов', id='run-script-button'),
                 html.Hr(),
-                create_update_file_component(1, 'Обновление файла ОМС',
-                                             os.path.join(base_script_path, 'oms_to_database.py')),
-                create_update_file_component(2, 'Обновление файла населения из ИСЗЛ',
-                                             os.path.join(base_script_path, 'people_to_database.py')),
-                create_update_file_component(3, 'Обновление файла диспансерного наблюдения из ИСЗЛ',
-                                             os.path.join(base_script_path, 'iszl_to_database.py')),
-                create_update_file_component(4, 'Обновление файла ЭМД из Квазар',
-                                             os.path.join(base_script_path, 'emd_to_database.py')),
-                create_update_file_component(5, 'Обновление файла врачей из Web.ОМС',
-                                             os.path.join(base_script_path, 'doctors_oms_to_database.py')),
-                create_update_file_component(6, 'Обновление списка участковых врачей и участков',
-                                             os.path.join(base_script_path, 'area_to_database.py')),
-                create_update_file_component(7, 'Обновление списка диагнозов и специальностей по 168н',
-                                             os.path.join(base_script_path, '168n_to_database.py')),
-                create_update_file_component(8, 'Обновление списка записанных на процедуры из журнала обращений Квазар',
-                                             os.path.join(base_script_path, 'obrprocedur_to_database.py')),
-                create_update_file_component(9, 'Обновление детализации диспансеризации',
-                                             os.path.join(base_script_path, 'detailed_dd_to_database.py')),
-                create_update_file_component(10, 'Обновление листов нетрудоспособности',
-                                             os.path.join(base_script_path, 'ln_to_database.py')),
-                create_update_file_component(11, 'Обновление журнала обращений',
-                                             os.path.join(base_script_path, 'obrdoc_to_database.py')),
+                create_update_file_component(1, 'Обновление файла ОМС', os.path.join(base_script_path, 'oms_to_database.py')),
+                create_update_file_component(2, 'Обновление файла населения из ИСЗЛ', os.path.join(base_script_path, 'people_to_database.py')),
+                create_update_file_component(3, 'Обновление файла диспансерного наблюдения из ИСЗЛ', os.path.join(base_script_path, 'iszl_to_database.py')),
+                create_update_file_component(4, 'Обновление файла ЭМД из Квазар', os.path.join(base_script_path, 'emd_to_database.py')),
+                create_update_file_component(5, 'Обновление файла врачей из Web.ОМС', os.path.join(base_script_path, 'doctors_oms_to_database.py')),
+                create_update_file_component(6, 'Обновление списка участковых врачей и участков', os.path.join(base_script_path, 'area_to_database.py')),
+                create_update_file_component(7, 'Обновление списка диагнозов и специальностей по 168н', os.path.join(base_script_path, '168n_to_database.py')),
+                create_update_file_component(8, 'Обновление списка записанных на процедуры из журнала обращений Квазар', os.path.join(base_script_path, 'obrprocedur_to_database.py')),
+                create_update_file_component(9, 'Обновление детализации диспансеризации', os.path.join(base_script_path, 'detailed_dd_to_database.py')),
+                create_update_file_component(10, 'Обновление листов нетрудоспособности', os.path.join(base_script_path, 'ln_to_database.py')),
+                create_update_file_component(11, 'Обновление журнала обращений', os.path.join(base_script_path, 'obrdoc_to_database.py')),
             ]
         )
     ]
 )
-
 
 # Функция для выполнения скрипта
 def run_script(n_clicks, loading_children, script_output_children, path_script):
@@ -130,7 +111,6 @@ def run_script(n_clicks, loading_children, script_output_children, path_script):
 
     return "Выполняется скрипт, подождите...", script_output_children
 
-
 # Функция для создания callback'ов
 def create_script_callback(index, path_script):
     @app.callback(
@@ -142,7 +122,6 @@ def create_script_callback(index, path_script):
     )
     def run_script_callback(n_clicks, loading_children, script_output_children):
         return run_script(n_clicks, loading_children, script_output_children, path_script)
-
 
 # Создание всех необходимых callback'ов
 create_script_callback(1, os.path.join(base_script_path, 'oms_to_database.py'))
@@ -156,7 +135,6 @@ create_script_callback(8, os.path.join(base_script_path, 'obr_procedur_to_databa
 create_script_callback(9, os.path.join(base_script_path, 'detailed_dd_to_database.py'))
 create_script_callback(10, os.path.join(base_script_path, 'ln_to_database.py'))
 create_script_callback(11, os.path.join(base_script_path, 'obr_doc_to_database.py'))
-print(os.path.join(base_script_path, 'oms_to_database.py'))
 
 @app.callback(
     [Output(f'color-indicator{i}', 'color') for i in range(1, 12)],
@@ -178,14 +156,12 @@ def update_color_indicator(n_clicks):
                 last_file_csv_in_directory(file_path)
             )
             for log_name, file_path in zip(
-                ['oms_log', 'people_log', 'iszl_log', 'emd_log', 'doctors_oms_log', 'area_log', 'dn168n_log',
-                 'obrproc_log', 'detaildd_log', 'ln_log', 'obrproc_log'],
+                ['oms_log', 'people_log', 'iszl_log', 'emd_log', 'doctors_oms_log', 'area_log', 'dn168n_log', 'obrproc_log', 'detaildd_log', 'ln_log', 'obrproc_log'],
                 list(file_paths.values())
             )
         )
     except ProgrammingError as e:
         return tuple("danger" for _ in range(11))
-
 
 @app.callback(
     [Output(f"file{i}-in-bd", "children") for i in range(1, 12)] +
@@ -195,13 +171,10 @@ def update_color_indicator(n_clicks):
 def update_text(n_clicks):
     try:
         return tuple(
-            f"Последний файл загруженный в БД: {query_last_record_sql(schema_names[log_name.split('_')[0]], log_name)}"
-            for log_name in
-            ['oms_log', 'people_log', 'iszl_log', 'emd_log', 'doctors_oms_log', 'area_log', 'dn168n_log', 'obrproc_log',
-             'detaildd_log', 'ln_log', 'obrproc_log']
+            f"Последний файл загруженный в БД: {query_last_record_sql(schema_names[log_name.split('_')[0]], log_name)}" for log_name in
+            ['oms_log', 'people_log', 'iszl_log', 'emd_log', 'doctors_oms_log', 'area_log', 'dn168n_log', 'obrproc_log', 'detaildd_log', 'ln_log', 'obrproc_log']
         ) + tuple(
-            f"Последний файл для загрузки в БД: {last_file_csv_in_directory(file_path)}" for file_path in
-            list(file_paths.values())
+            f"Последний файл для загрузки в БД: {last_file_csv_in_directory(file_path)}" for file_path in list(file_paths.values())
         )
     except ProgrammingError as e:
         return tuple(f"Ошибка: {str(e)}" for _ in range(22))
