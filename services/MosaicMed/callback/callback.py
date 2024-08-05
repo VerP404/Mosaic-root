@@ -89,6 +89,7 @@ def query_last_record_sql(schema_name, name_table):
 
 
 def last_file_csv_in_directory(directory):
+    print(directory)
     try:
         # Проверка существования директории
         if not os.path.exists(directory):
@@ -99,10 +100,10 @@ def last_file_csv_in_directory(directory):
 
         # Фильтрация списка файлов по расширению .csv
         csv_files = [file for file in files if file.endswith('.csv')]
-
+        print(csv_files)
         # Сортировка файлов по дате последнего изменения
         sorted_files = sorted(csv_files, key=lambda x: os.path.getmtime(os.path.join(directory, x)), reverse=True)
-
+        print(sorted_files)
         if sorted_files:
             latest_file = sorted_files[0]
             return latest_file, None
