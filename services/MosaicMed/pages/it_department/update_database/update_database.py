@@ -34,7 +34,7 @@ file_paths = {
     'ln': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'kvazar', 'ln_data')),
     'obrdoc': os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'kvazar', 'obrdoc_data'))
 }
-
+print(os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..', 'files', 'oms', 'oms_data')))
 schema_names = {
     # Таблица: Схема
     'oms': 'oms',
