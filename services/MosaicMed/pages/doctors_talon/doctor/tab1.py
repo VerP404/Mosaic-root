@@ -1,13 +1,13 @@
-from dash import html, Output, Input, dash_table
+from dash import dcc, html, Output, Input
 import dash_bootstrap_components as dbc
-from database.db_conn import engine
+from services.MosaicMed.flaskapp.flask_app import flask_app
 from services.MosaicMed.app import app
-from services.MosaicMed.callback.callback import get_selected_doctors, TableUpdater, get_current_reporting_month
-from services.MosaicMed.callback.slider_months import get_selected_period
-from services.MosaicMed.generate_pages.constants import months_sql_labels
+from database.db_conn import engine
+from services.MosaicMed.callback.callback import get_selected_doctors, get_current_reporting_month, TableUpdater
 from services.MosaicMed.generate_pages.elements import card_table
-from services.MosaicMed.generate_pages.filters import filter_years, filter_doctors, filter_months
-from services.MosaicMed.pages.doctors_talon.doctor.query import sql_query_amb_def, sql_query_stac_def, sql_query_dd_def
+from services.MosaicMed.generate_pages.filters import filter_doctors, filter_years, filter_months
+from services.MosaicMed.callback.slider_months import get_selected_period
+from services.MosaicMed.pages.doctors_talon.doctor.query import sql_query_amb_def, sql_query_dd_def, sql_query_stac_def
 
 type_page = "tab1-doctor-talon"
 
@@ -56,7 +56,6 @@ tab1_doctor_talon_layout = html.Div(
 )
 
 
-# Определяем отчетный месяц и выводим его на страницу и в переменную dcc Store
 @app.callback(
     Output(f'current-month-name-{type_page}', 'children'),
     Input('date-interval', 'n_intervals')
@@ -78,6 +77,7 @@ def update_dropdown_layout(selected_doctor):
     return [], selected_item_text
 
 
+
 @app.callback(
     Output(f'selected-period-{type_page}', 'children'),
     [Input(f'range-slider-month-{type_page}', 'value'),
@@ -88,15 +88,13 @@ def update_selected_period_list(selected_months_range, selected_year, current_mo
     return get_selected_period(selected_months_range, selected_year, current_month_name)
 
 
-
 @app.callback(
     [Output(f'result-table1-{type_page}', 'columns'),
      Output(f'result-table1-{type_page}', 'data'),
      Output(f'result-table2-{type_page}', 'columns'),
      Output(f'result-table2-{type_page}', 'data'),
      Output(f'result-table3-{type_page}', 'columns'),
-     Output(f'result-table3-{type_page}', 'data')
-     ],
+     Output(f'result-table3-{type_page}', 'data')],
     [Input(f'dropdown-doctor-{type_page}', 'value'),
      Input(f'selected-period-{type_page}', 'children')]
 )
@@ -105,9 +103,7 @@ def update_table_dd(value_doctor, selected_period):
         return [], [], [], [], [], []
 
     months_placeholder = ', '.join([f"'{month}'" for month in selected_period])
-    bind_params = {
-        'value_doctor': value_doctor
-    }
+    bind_params = {'value_doctor': value_doctor}
     columns1, data1 = TableUpdater.query_to_df(engine, sql_query_amb_def(months_placeholder), bind_params)
     columns2, data2 = TableUpdater.query_to_df(engine, sql_query_dd_def(months_placeholder), bind_params)
     columns3, data3 = TableUpdater.query_to_df(engine, sql_query_stac_def(months_placeholder), bind_params)

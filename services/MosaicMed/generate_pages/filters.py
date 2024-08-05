@@ -20,10 +20,16 @@ def filter_years(type_page):
 
 
 def filter_doctors(type_page):
-    return (dbc.Col(
-        dcc.Dropdown(id=f'dropdown-doctor-{type_page}', options=[],
-                     placeholder='Выберите врача...')
-    ))
+    return html.Div(
+        dcc.Dropdown(
+            id=f'dropdown-doctor-{type_page}',
+            options=[],  # Initially empty, will be filled by callback
+            value=None,
+            multi=False,
+            placeholder="Выберите врача"
+        ),
+        style={"width": "100%"}
+    )
 
 
 def filter_months(type_page):
