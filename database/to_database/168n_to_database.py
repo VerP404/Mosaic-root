@@ -9,7 +9,7 @@ if __name__ == "__main__":
     type_text = '168н'
     schema = 'info'
     name_table = 'dn168n_data'
-    name_table_db_log = 'dn168n_log'
+    name_table_db_log = 'dn_168n_log'
 
     try:
         to_database(engine, folder_path, name_file, type_text, name_table, name_table_db_log)
