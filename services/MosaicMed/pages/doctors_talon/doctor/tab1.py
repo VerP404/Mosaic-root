@@ -21,8 +21,8 @@ tab1_doctor_talon_layout = html.Div(
                             dbc.CardHeader("Фильтры"),
                             dbc.Row(
                                 [
-                                    filter_doctors(type_page),  # фильтр по врачам
-                                    filter_years(type_page)  # фильтр по годам
+                                    dbc.Col(filter_doctors(type_page), width=9),  # фильтр по врачам
+                                    dbc.Col(filter_years(type_page), width=3)  # фильтр по годам
                                 ]
                             ),
                             dbc.Row(
@@ -30,12 +30,15 @@ tab1_doctor_talon_layout = html.Div(
                                     filter_months(type_page)  # фильтр по месяцам
                                 ]
                             ),
-                            html.Div(id=f'selected-doctor-{type_page}', className='filters-label',
-                                     style={'display': 'none'}),
-                            html.Div(id=f'selected-period-{type_page}', className='filters-label',
-                                     style={'display': 'none'}),
+                            dbc.Row(
+                                [
+                                    dbc.Col(html.Div(id=f'selected-doctor-{type_page}', className='filters-label',
+                                                     style={'display': 'none'}), width=9),
+                                    dbc.Col(html.Div(id=f'selected-period-{type_page}', className='filters-label',
+                                                     style={'display': 'none'}), width=3)
+                                ]
+                            ),
                             html.Div(id=f'current-month-name-{type_page}', className='filters-label'),
-
                         ]
                     ),
                     style={"width": "100%", "padding": "0rem", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
