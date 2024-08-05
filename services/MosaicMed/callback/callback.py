@@ -89,20 +89,30 @@ def query_last_record_sql(schema_name, name_table):
 
 
 def last_file_csv_in_directory(directory):
-    # Получение списка файлов в папке
-    files = os.listdir(directory)
+    try:
+        # Проверка существования директории
+        if not os.path.exists(directory):
+            return "Директория не найдена"
 
-    # Фильтрация файлов по расширению .csv
-    csv_files = [file for file in files if file.endswith('.csv')]
+        # Получение списка файлов в папке
+        files = os.listdir(directory)
 
-    # Сортировка файлов по дате изменения в обратном порядке
-    sorted_files = sorted(csv_files, key=lambda x: os.path.getmtime(os.path.join(directory, x)), reverse=True)
-    if sorted_files:
-        latest_file = sorted_files[0]
-        return latest_file
-    else:
-        return 'В папке нет файлов'
+        # Фильтрация файлов по расширению .csv
+        csv_files = [file for file in files if file.endswith('.csv')]
 
+        # Проверка наличия csv файлов
+        if not csv_files:
+            return "В папке нет файлов"
+
+        # Сортировка файлов по дате изменения в обратном порядке
+        sorted_files = sorted(csv_files, key=lambda x: os.path.getmtime(os.path.join(directory, x)), reverse=True)
+        if sorted_files:
+            latest_file = sorted_files[0]
+            return latest_file
+        else:
+            return "В папке нет файлов"
+    except Exception as e:
+        return f"Ошибка: {str(e)}"
 
 class TableUpdater:
     def __init__(self, engine):
