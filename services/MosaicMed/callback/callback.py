@@ -106,6 +106,7 @@ def last_file_csv_in_directory(directory):
         print(sorted_files)
         if sorted_files:
             latest_file = sorted_files[0]
+            print(latest_file)
             return latest_file, None
         else:
             return None, 'Нет CSV файлов в директории'
