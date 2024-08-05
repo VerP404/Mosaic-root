@@ -70,7 +70,9 @@ def update_current_month(n_intervals):
 )
 def update_dropdown_layout(selected_doctor):
     dropdown_options, selected_item_text = get_selected_doctors(selected_doctor)
-    return dropdown_options, selected_item_text
+    if isinstance(dropdown_options, list) and all(isinstance(option, dict) for option in dropdown_options):
+        return dropdown_options, selected_item_text
+    return [], selected_item_text
 
 
 @app.callback(

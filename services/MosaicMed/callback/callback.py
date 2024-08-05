@@ -59,8 +59,9 @@ def get_selected_specialist(selected_value, sql_query):
 def get_selected_doctors(selected_value):
     extracted_names_list = get_extracted_names_list_doctors(engine)
     dropdown_options = [{'label': item, 'value': item} for item in extracted_names_list]
-    selected_item_text = f'Выбранный врач: {selected_value}'
+    selected_item_text = f'Выбранный врач: {selected_value}' if selected_value else 'Доктор не выбран'
     return dropdown_options, selected_item_text
+
 
 
 def query_last_record_sql(schema_name, name_table):
@@ -79,7 +80,6 @@ def query_last_record_sql(schema_name, name_table):
 
 
 def last_file_csv_in_directory(directory):
-    print(directory)
     try:
         # Проверка существования директории
         if not os.path.exists(directory):
@@ -90,13 +90,10 @@ def last_file_csv_in_directory(directory):
 
         # Фильтрация списка файлов по расширению .csv
         csv_files = [file for file in files if file.endswith('.csv')]
-        print(csv_files)
         # Сортировка файлов по дате последнего изменения
         sorted_files = sorted(csv_files, key=lambda x: os.path.getmtime(os.path.join(directory, x)), reverse=True)
-        print(sorted_files)
         if sorted_files:
             latest_file = sorted_files[0]
-            print(latest_file)
             return latest_file, None
         else:
             return None, 'Нет CSV файлов в директории'
