@@ -6,6 +6,8 @@ import datetime
 
 def lastfile(pathoms: str):
     list_of_files = glob.glob(pathoms)
+    if not list_of_files:
+        raise FileNotFoundError(f"Файлы, соответствующие шаблону {pathoms}, не найдены.")
     latest_file_oms = max(list_of_files, key=os.path.getctime)
     file_name = os.path.basename(latest_file_oms)
     return [latest_file_oms, file_name]
@@ -14,7 +16,7 @@ def lastfile(pathoms: str):
 def network_folder(folder, n_f):
     if os.path.exists(folder):
         print("Сетевая папка доступна.")
-        return rf'{folder}\{n_f}'
+        return os.path.join(folder, n_f)
     else:
         print("Сетевая папка недоступна.")
         return None
@@ -125,17 +127,17 @@ def upload_info_log_in_database(conn, df, name_last_file, type_text, schema, nam
     return output_string
 
 
-def to_database(conn, folder_path, name_file, type_text,  schema, name_table, name_table_db_log):
+def to_database(conn, folder_path, name_file, type_text, schema, name_table, name_table_db_log):
     # Проверка доступности сетевой папки и возврат пути до папки с заданным шаблоном поиска файла
     path_file = network_folder(folder_path, name_file)
+    if path_file is None:
+        raise FileNotFoundError(f"Сетевая папка недоступна: {folder_path}")
     # Возвращаем полный путь к последнему файлу выгрузки и имя файла
     path_latest_file, name_last_file = lastfile(path_file)
-    # print(f'Подгружаем файл {path_latest_file}')
-
     # загружаем данные в базу данных и возвращаем датафрейм
     upload_df = upload_file_in_database(conn, schema, name_table, path_latest_file, type_text)
     print(f"Файл {type_text} подгружен: количество строк -> {len(upload_df)}")
-
     # загружаем данные о выгрузке в базу данных и возвращаем информацию о загруженном файле
-    output_string_log = upload_info_log_in_database(conn, upload_df, name_last_file, type_text, schema, name_table_db_log)
+    output_string_log = upload_info_log_in_database(conn, upload_df, name_last_file, type_text, schema,
+                                                    name_table_db_log)
     # print(output_string_log)
