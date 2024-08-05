@@ -4,9 +4,10 @@ import dash
 import dash_bootstrap_components as dbc
 
 external_stylesheets = [
-    dbc.themes.BOOTSTRAP,
-    "/assets/css/styles.css",
-    "/assets/css/all.min.css"
+    # dbc.themes.BOOTSTRAP,
+    "/assets/css/bootstrap.min.css",  # Локальный Bootstrap CSS
+    "/assets/css/styles.css",  # Ваши собственные стили
+    "/assets/css/fontawesome/all.css"  # Локальный Font Awesome CSS
 ]
 
 app = dash.Dash(__name__,
@@ -18,6 +19,6 @@ app = dash.Dash(__name__,
 
 # Установка заголовка вкладки
 app.title = 'МозаикаМед'
-app._favicon = 'assets/img/favicon.ico'
+app._favicon = 'assets/img/favicon.ico'  # Локальный favicon
 
 server = app.server
